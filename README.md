@@ -8,7 +8,7 @@ A web application built to digitize student records using HTML, CSS, and JS. Man
 - [About](#about)
 - [Author](#author)
 - [Tech Stack](#tech-stack)
-- [Features](#features)
+- [Key Features](#features)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -29,3 +29,14 @@ This application serves as a centralized platform for managing student profiles,
 | CSS3       | Styling, layout, and responsiveness |
 | JavaScript | Application Logic and Interactivity |
 
+## Key Features
+
+* **Student Identity Tracking:** Records unique Student Numbers, full names, Date of Birth, and calculated age.
+
+* **Dual-Email System:** Manages institutional **Perpetual email** accounts alongside **personal email** addresses for effective communication.
+
+* **Parent & Guardian Records:** Keeps organized records of parents' names (Father & Mother) for administrative and emergency reference.
+
+* **Contact & Demographics:** Stores residential addresses and direct personal phone numbers.
+
+* **Responsive Dashboard:** Simple, accessible user interface optimized for desktop and mobile views.
