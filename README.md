@@ -10,7 +10,6 @@ A web application built to digitize student records using HTML, CSS, and JS. Man
 - [Tech Stack](#tech-stack)
 - [Key Features](#features)
 - [Project Structure](#project-structure)
-- [Installation](#installation)
 - [Usage](#usage)
 - [Roadmap](#roadmap)
 - [License](#license)
@@ -21,6 +20,8 @@ A web application built to digitize student records using HTML, CSS, and JS. Man
 
 This application serves as a centralized platform for managing student profiles, contact details, and family records. Built using plain HTML, CSS, and JavaScript, it focuses on fast client-side performance, responsive design, and intuitive data handling without relying on heavy external frameworks.
 
+---
+
 ## Tech Stack
 
 | Technology | Purpose |
@@ -28,6 +29,8 @@ This application serves as a centralized platform for managing student profiles,
 | HTML 5     | Markup and page structures |
 | CSS3       | Styling, layout, and responsiveness |
 | JavaScript | Application Logic and Interactivity |
+
+---
 
 ## Key Features
 
@@ -40,3 +43,18 @@ This application serves as a centralized platform for managing student profiles,
 * **Contact & Demographics:** Stores residential addresses and direct personal phone numbers.
 
 * **Responsive Dashboard:** Simple, accessible user interface optimized for desktop and mobile views.
+
+---
+
+## Project Structure
+
+```
+student-information-system/
+├── index.html      # Main HTML structure
+├── style.css       # Application styling
+├── script.js       # Core JavaScript logic
+└── README.md       # Project documentation
+```
+
+---
+
