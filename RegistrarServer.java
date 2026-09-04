@@ -12,7 +12,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-/** Entry point and HTTP routing. Handlers stay thin: parse request, call the repository, render. */
 public final class RegistrarServer {
 
   private static final int PORT = 8080;
@@ -139,7 +138,6 @@ final class HttpUtil {
   }
 }
 
-/** Builds the home page HTML from live repository data. */
 final class HtmlView {
 
   private HtmlView() {}
