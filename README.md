@@ -58,10 +58,21 @@ Developer of the Student Information System
 
 ```
 student-information-system/
-├── index.html      # Main HTML structure
-├── style.css       # Application styling
-├── script.js       # Core JavaScript logic
-└── README.md       # Project documentation
+├── index.html            → Login / Sign up
+├── dashboard.html        → Progress overview + account settings
+├── personal.html         → I. Personal Data (incl. I-B Alien Status)
+├── residence.html        → II. Residence Data
+├── physical.html         → III. Physical Description
+├── family.html           → IV. Family Data
+├── education.html        → V. Educational Background
+├── qualification.html    → VI. General Qualification
+├── references.html       → VII. References
+├── css/
+│   └── style.css         → Shared stylesheet
+└── js/
+    ├── store.js          → Data layer (accounts + records, localStorage)
+    ├── layout.js         → Builds sidebar/topbar on every page
+    └── auth.js           → Login & signup logic
 ```
 
 ---
