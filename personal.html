@@ -1,0 +1,106 @@
+<!Doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>I. Personal Data - Registrar SIS </title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body data-title="I. Personal Data">
+    <div class="app">
+        <aside class="sidebar" id="sidebar"></aside>
+        <main class="main">
+            <header class="topbar" id="topbar"></header>
+            <div class="content">
+                <form id="sectionForm" class="sheet-card">
+                    <div class="band">General Student Information Sheet <small>Academic standing</small></div>
+                    <div class="sheet-body">
+                        <div class="grid g3>
+
+                        <label class="field">Course
+                            <select name="course"><option value="">Choose…</option><option>Bachelor of Science in Information Technology</option><option>Bachelor of Science in Computer Science</option></select>
+                        </label>
+
+                        <label class="field">Major / specialization<input name="major" placeholder="e.g. Game Development"></label>
+                        <label class="field">Curriculum year<input name="curriculumYear" placeholder="e.g. 2025 to 2026"></label>
+                    </div>
+
+                    <div class="grid g3">
+                        <label class="field">Year level
+                            <select name="yearLevel"><option value="">Choose…</option><option>1st year</option><option>2nd year</option><option>3rd year</option><option>4th year</option></select>
+                        </label>
+
+                        <label class="field">Term
+                            <select name="term"><option value="">Choose…</option><option>1st semester</option><option>2nd semester</option><option>Summer</option></select>
+                        </label>
+
+                        <label class="field">School year<input name="schoolYear" placeholder="e.g. 2026 to 2027"></label>
+                    </div>
+                </div>
+
+                <div class="band">I-A · Personal Data</div>
+                <div class="sheet-body">
+                    <div class="grid g3">
+                        <label class="field">Last name<input name="lastName" placeholder="e.g. Igna"></label>
+                        <label class="field">First name<input name="firstName" placeholder="e.g. Prince Ram Roydlikent"></label>
+                        <label class="field">Middle name<input name="middleName" placeholder="e.g. Fajardo"></label>
+                    </div>
+
+                    <label class="field">Name in native language character<input name="nativeLanguage"></label>
+
+                    <div class="grid g3">
+                        <label class="field">Gender<select name="gender"><option value="">Choose…</option><option>Male</option><option>Female</option><option>Others</option></select></label>
+                        <label class="field">Religion<input name="religion" placeholder="e.g. Roman Catholic"></label>
+                        <label class="field">Nationality<input name="nationality" placeholder="e.g. Filipino"></label>
+                    </div>
+
+                    <div class="grid g3">
+                        <label class="field">Civil status
+                            <select name="civilStatus"><option value="">Choose…</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option><option>Divorced</option></select>
+                        </label>
+
+                        <label class="field">Date of birth<input type="date" name="dob"></label>
+                        <label class="field">Place of birth<input name="placeOfBirth" placeholder="e.g. Quezon City, Philippines"></label>
+                    </div>
+
+                    <div class="grid g3">
+                        <label class="field">Birth Order<input type="number" name="birthOrder" min="1"></label>
+                        <label class="field">Mobile number<input name="mobile" placeholder="e.g. 09123456789"></label>
+                        <label class="field">Email address<input type="email" name="email" placeholder="e.g. princerambo@example.com"></label>
+                    </div>
+                </div>
+
+                <div class="band">I-B · Alien Status Data <small>(for alien / foreign student only)</small></div>
+                <div class="sheet-body">
+
+                    <div class="grid g2">
+                        <label class="field">Visa status<select name="visaStatus"></label>
+                        <label class="field">Authorized stay until<input name="authorizedStay"></label>
+                    </div>
+
+                    <div class="grid g2">
+                        <label class="field">Passport no.<input name="passportNo"></label>
+                        <label class="field">Place of Issue<input name="passportIssuePlace"></label>
+                        <label class="field">Expiration date<input name="passportExpiry"></label>
+                    </div>
+
+                    <div class="grid g2">
+                        <label class="field">Alien Certificate of Registration (ACR) no.<input name="acrNo"></label>
+                        <label class="field">Date of Issue<input name="acrIssuePlace"></label>
+                        <label class="field">Expiration date<input name="acrExpiry"></label>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <span class="stamp" id="savedStamp"></span>
+                    <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                 </div>
+            </form>
+        </main>
+    </div>
+    <sciprt src="js/store.js"></script>
+    <script src="js/layout.js"></script>
+    <script>SIS.bindSection('personal')</script>
+</body>
+</html>
