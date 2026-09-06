@@ -75,11 +75,26 @@
                         <label class="field">Zipcode<input name="emgZip" style="max-width:200px"></label>
                     </div>
 
-
-
+                    <div class="actions">
+                        <span class="stamp" id="savedStamp"></span>
+                        <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                        <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                    </div>
                 </form>
             </div>
         </main>
-
-    </body>
+    </div>
+    <script src="js/store.js"></script>
+    <script src="js/layout.js"></script>
+    <script>
+        function copyAddress(from, to) {
+            ['Street', 'City', 'Province', 'Country', 'Zip', 'Phone'].forEach(f => {
+                const src = document.getElementsByName(from + f)[0];
+                const dst = document.getElementsByName(to + f)[0];
+                if (src && dst) dst.value = src.value;
+            });
+        }
+        SIS.bindSection('residence');
+    </script>
+</body>
 </html>
