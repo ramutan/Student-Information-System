@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VII. References — Registrar SIS</title>
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="VII. References">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+            <form id="sectionForm" class="sheet-card">
+                <div class="band">VII · References</div>
+                <div class="sheet-body">
+                    <p class="subnote">Write two or three references who can vouch or guarantee for your total behavior.</p>
+                    <div class="grid g2">
+                        <label class="field">Reference 1 — Name<input name="refName1"></label>
+                        <label class="field">Address / telephone no.<input name="refContact1"></label>
+                    </div>
+                    <div class="grid g2">
+                        <label class="field">Reference 2 — Name<input name="refName2"></label>
+                        <label class="field">Address / telephone no.<input name="refContact2"></label>
+                    </div>
+                    <div class="grid g2">
+                        <label class="field">Reference 3 — Name <span class="opt">(optional)</span><input name="refName3"></label>
+                        <label class="field">Address / telephone no.<input name="refContact3"></label>
+                    </div>
+                    <p class="note"><strong>NOTE:</strong> By saving the information, I hereby state and acknowledge that the information provided is true and complete to the best of my knowledge.</p>
+                </div>
+                <div class="actions">
+                    <span class="stamp" id="savedStamp"></span>
+                    <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>SIS.bindSection('references');</script>
+</body>
+</html>

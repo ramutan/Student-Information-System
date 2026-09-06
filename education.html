@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <title>V. Educational Background — Registrar SIS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="V. Educational Background">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+            <form id="sectionForm" class="sheet-card">
+                <div class="band">V · Educational Background</div>
+                <div class="sheet-body">
+
+                    <div class="edu-block"><h4>Elementary</h4>
+                        <div class="grid g4">
+                            <label class="field">Name of school<input name="elemName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="elemCourse"></label>
+                            <label class="field">Year graduated<input name="elemYear" placeholder="e.g. 2018"></label>
+                            <label class="field">Honors / awards<input name="elemHonors" placeholder="e.g. With honors"></label>
+                        </div>
+                    </div>
+
+                    <div class="edu-block"><h4>High School</h4>
+                        <div class="grid g4">
+                            <label class="field">Name of school<input name="hsName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="hsCourse"></label>
+                            <label class="field">Year graduated<input name="hsYear" placeholder="e.g. 2022"></label>
+                            <label class="field">Honors / awards<input name="hsHonors"></label>
+                        </div>
+                    </div>
+
+                    <div class="edu-block"><h4>Vocational <span class="opt">(if any)</span></h4>
+                        <div class="grid g4">
+                            <label class="field">Name of school<input name="vocName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="vocCourse"></label>
+                            <label class="field">Year graduated<input name="vocYear"></label>
+                            <label class="field">Honors / awards<input name="vocHonors"></label>
+                        </div>
+                    </div>
+
+                    <div class="edu-block"><h4>College</h4>
+                        <div class="grid g4">
+                            <label class="field">Name of school<input name="colName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="colCourse"></label>
+                            <label class="field">Year graduated<input name="colYear"></label>
+                            <label class="field">Honors / awards<input name="colHonors"></label>
+                        </div>
+                    </div>
+
+                    <div class="edu-block"><h4>Post-Graduate <span class="opt">(if any)</span></h4>
+                        <div class="grid g4">
+                            <label class="field">Name of school<input name="pgName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="pgCourse"></label>
+                            <label class="field">Year graduated<input name="pgYear"></label>
+                            <label class="field">Honors / awards<input name="pgHonors"></label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="actions">
+                    <span class="stamp" id="savedStamp"></span>
+                    <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>SIS.bindSection('education');</script>
+</body>
+</html>

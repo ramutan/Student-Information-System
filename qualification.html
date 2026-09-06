@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VI. General Qualification — Registrar SIS</title>
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="VI. General Qualification">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+            <form id="sectionForm" class="sheet-card">
+                <div class="band">VI · General Qualification</div>
+                <div class="sheet-body">
+                    <div class="grid g2">
+                        <label class="field">Languages<input name="languages" placeholder="e.g. English, Filipino, Tagalog"></label>
+                        <label class="field">Hobbies<input name="hobbies" placeholder="e.g. Gaming, reading"></label>
+                    </div>
+                    <div class="grid g2">
+                        <label class="field">Skills<input name="skills" placeholder="e.g. Web development, editing"></label>
+                        <label class="field">Talents<input name="talents" placeholder="e.g. Singing, drawing"></label>
+                    </div>
+                    <div class="grid g2">
+                        <label class="field">Sports<input name="sports" placeholder="e.g. Basketball, volleyball"></label>
+                        <label class="field">Honors / awards / merits <span class="opt">(ex. "Model Student, 1990")</span><input name="honorsAwards"></label>
+                    </div>
+                    <label class="field">Extra-curricular activities <span class="opt">(organizations, clubs, etc.)</span><input name="extracurricular"></label>
+                    <label class="field">Why am I taking this course?<textarea name="whyCourse" placeholder="Tell us your reasons for choosing this course…"></textarea></label>
+                </div>
+                <div class="actions">
+                    <span class="stamp" id="savedStamp"></span>
+                    <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>SIS.bindSection('qualification');</script>
+</body>
+</html>

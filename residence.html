@@ -1,100 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>II. Residence Data - Registrar SIS</title>
-        <link rel="stylesheet" href="css/stylesheet">
-    </head>
-    <body data-title="II. Residence Data">
-    <div class="app">
-        <aside class="sidebar" id="sidebar"></aside>
-        <main class="main">
-            <header class="topbar" id="topbar"></header>
-            <div class="content">
-
-                <form id="sectionForm" class="sheet-card">
-                    <div class="band">II. Residence Data - Home Address</div>
-                    <div class="sheet-body">
-                        <div class="grid g3">
-                            <label class="field">Aparment / house no. / street / barangay<input name="HomeStreet" placeholder="e.g. Syria Street Blk 2 Lot 15 Tierra Nevada PHS7"></label>
-                            <label class="field">City / municipality<input name="homeCity" placeholder="e.g. General Trias"></label>
-                            <label class="field">Province / state<input name="homeProvince" placeholder="e.g. Cavite"></label>
-                        </div>
-
-                        <div class="grid g3">
-                            <label class="field">Country<input name="homeCountry" placeholder="e.g. Philippines"></label>
-                            <label class="field">Zipcode<input name="homeZip" placeholder="e.g. 4107"></label>
-                            <label class="field">Telephone no.<input name="homePhone"></label>
-                        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>II. Residence Data — Registrar SIS</title>
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="II. Residence Data">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+            <form id="sectionForm" class="sheet-card">
+                <div class="band">II · Residence Data — Home Address</div>
+                <div class="sheet-body">
+                    <div class="grid g3">
+                        <label class="field">Apartment / house no. / street / barangay<input name="homeStreet" placeholder="e.g. Santa Ines Blk 4 Lot 13 TN PHSGA"></label>
+                        <label class="field">City / municipality<input name="homeCity" placeholder="e.g. Gen. Trias"></label>
+                        <label class="field">Province / state<input name="homeProvince" placeholder="e.g. Cavite"></label>
                     </div>
-
-                    <div class="band">Current Contact Address
-                        <button type="button" class="band-btn" onclick="copyAddress('home','cur')">⇩ Same as home address</button>"
+                    <div class="grid g3">
+                        <label class="field">Country<input name="homeCountry" placeholder="e.g. Philippines"></label>
+                        <label class="field">Zipcode<input name="homeZip" placeholder="e.g. 4107"></label>
+                        <label class="field">Telephone no.<input name="homePhone"></label>
                     </div>
+                </div>
 
-                    <div class="sheet-body">
-                        <div class="grid g3">
-                            <label class="field">Contact person / guardian name<input name="guardianName" placeholder="e.g. Rambo Igna"></label>
-                            <label class="field">Relation<input name="guardianRelation" placeholder="e.g. Father"></label>
-                            <label class="field">Email address<input name="email" name="curEmail"></label>
-                        </div>
-
-                        <label class="field">Apartment/ house no. / street / barangay<input name="curStreet"></label>
-
-                        <div class="grid g3">
-                            <label class="field">City / municipality<input name="curCity"></label>
-                            <label class="field">Province / state<input name="curProvince"></label>
-                            <label class="field">Country<input name="curCountry"></label>
-                        </div>
-
-                        <div class="grid g2">
-                            <label class="field">Zipcode<input name="curZip"></label>
-                            <label class="field">Telephone no.<input name="curPhone"></label>
-                        </div>
+                <div class="band">Current Contact Address
+                    <button type="button" class="band-btn" onclick="copyAddress('home','cur')">⇩ Same as home address</button>
+                </div>
+                <div class="sheet-body">
+                    <div class="grid g3">
+                        <label class="field">Contact person / guardian name<input name="guardianName" placeholder="e.g. Rambo Igna"></label>
+                        <label class="field">Relation<input name="guardianRelation" placeholder="e.g. Father"></label>
+                        <label class="field">Email address<input type="email" name="curEmail"></label>
                     </div>
-
-                    <div class="band">Emergency Contact Address <small>(if not same as above)</small>
-                        <button type="button" class="band-btn" onclick="copyAddress('cur','emg')">⇩ Same as current contact</button>
+                    <label class="field">Apartment / house no. / street / barangay<input name="curStreet"></label>
+                    <div class="grid g3">
+                        <label class="field">City / municipality<input name="curCity"></label>
+                        <label class="field">Province / state<input name="curProvince"></label>
+                        <label class="field">Country<input name="curCountry"></label>
                     </div>
-
-                    <div class="sheet-body">
-                        <div class="grid g3">
-                            <label class="field">Contact person name<input name="emgName"></label>
-                            <label class="field">Relation<input name="emgRelation"></label>
-                            <label class="field">Telephone no.<input name="emgPhone"></label>
-                        </div>
-
-                        <label class="field">Apartment / house no. / street / barangay<input name="emgSteet"></label>
-
-                        <div class="grid g3">
-                            <label class="field">City / municipality<input name="emgCity"></label>
-                            <label class="field">Province / state<input name="emgProvince"></label>
-                            <label class="field">Country<input name="emgCountry>"</label>
-                        </div>
-                        <label class="field">Zipcode<input name="emgZip" style="max-width:200px"></label>
+                    <div class="grid g2">
+                        <label class="field">Zipcode<input name="curZip"></label>
+                        <label class="field">Telephone no.<input name="curPhone"></label>
                     </div>
+                </div>
 
-                    <div class="actions">
-                        <span class="stamp" id="savedStamp"></span>
-                        <button type="button" class="btn ghost" id="resetBtn">Reset</button>
-                        <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                <div class="band">Emergency Contact Address <small>(if not same as above)</small>
+                    <button type="button" class="band-btn" onclick="copyAddress('cur','emg')">⇩ Same as current contact</button>
+                </div>
+                <div class="sheet-body">
+                    <div class="grid g3">
+                        <label class="field">Contact person name<input name="emgName"></label>
+                        <label class="field">Relation<input name="emgRelation"></label>
+                        <label class="field">Telephone no.<input name="emgPhone"></label>
                     </div>
-                </form>
-            </div>
-        </main>
-    </div>
-    <script src="js/store.js"></script>
-    <script src="js/layout.js"></script>
-    <script>
-        function copyAddress(from, to) {
-            ['Street', 'City', 'Province', 'Country', 'Zip', 'Phone'].forEach(f => {
-                const src = document.getElementsByName(from + f)[0];
-                const dst = document.getElementsByName(to + f)[0];
-                if (src && dst) dst.value = src.value;
-            });
-        }
-        SIS.bindSection('residence');
-    </script>
+                    <label class="field">Apartment / house no. / street / barangay<input name="emgStreet"></label>
+                    <div class="grid g3">
+                        <label class="field">City / municipality<input name="emgCity"></label>
+                        <label class="field">Province / state<input name="emgProvince"></label>
+                        <label class="field">Country<input name="emgCountry"></label>
+                    </div>
+                    <label class="field">Zipcode<input name="emgZip" style="max-width:280px"></label>
+                </div>
+
+                <div class="actions">
+                    <span class="stamp" id="savedStamp"></span>
+                    <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>
+function copyAddress(from, to) {
+    ['Street', 'City', 'Province', 'Country', 'Zip', 'Phone'].forEach(f => {
+        const src = document.getElementsByName(from + f)[0];
+        const dst = document.getElementsByName(to + f)[0];
+        if (src && dst) dst.value = src.value;
+    });
+}
+SIS.bindSection('residence');
+</script>
 </body>
 </html>

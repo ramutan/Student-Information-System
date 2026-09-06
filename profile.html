@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <title>My Profile — Registrar SIS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="My Profile">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+            <form id="profileForm" class="sheet-card" novalidate>
+                <div class="band">My Profile <small>Account details &amp; photo</small></div>
+                <div class="sheet-body">
+                    <div class="avatar-upload">
+                        <div class="avatar-big" id="avatarBox" title="Click to upload a photo"></div>
+                        <div>
+                            <strong id="whoName"></strong>
+                            <div class="subnote">JPG or PNG · automatically resized · stored in this browser only</div>
+                            <div style="display:flex;gap:8px;margin-top:10px">
+                                <button type="button" class="btn ghost sm" id="uploadBtn">⇧ Upload photo</button>
+                                <button type="button" class="btn ghost sm" id="removePhoto">Remove photo</button>
+                            </div>
+                            <input type="file" id="photoInput" accept="image/*" class="hidden">
+                        </div>
+                    </div>
+
+                    <div class="grid g2">
+                        <label class="field">Full name<input id="fullName" name="fullName" placeholder="e.g. Prince Ram R. Igna"></label>
+                        <label class="field">Email address<input type="email" id="email" name="email" placeholder="name@gmail.com"></label>
+                    </div>
+                    <label class="field">Student number <span class="opt">(cannot be changed — this is your account ID)</span>
+                        <input id="studentNoBox" disabled>
+                    </label>
+                    <div class="form-error" id="profileError"></div>
+                </div>
+                <div class="actions">
+                    <span class="stamp">Changes apply to your account immediately.</span>
+                    <button type="button" class="btn primary" id="saveProfile">Save profile</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>
+(function () {
+    const user = SIS.currentUser();
+    if (!user) { location.replace('index.html'); return; }
+
+    let pendingPhoto;                       // undefined = unchanged, null = removed, string = new
+    const box = document.getElementById('avatarBox');
+    const photoInput = document.getElementById('photoInput');
+
+    function renderAvatar(photo) {
+        box.innerHTML = photo ? `<img src="${photo}" alt="Profile photo">`
+                              : SIS.esc((user.fullName || user.studentNo).slice(0, 2).toUpperCase());
+    }
+    function syncChips(u) {
+        const name = u.fullName || u.studentNo;
+        const html = u.photo ? `<img class="avatar" src="${u.photo}" alt="">`
+                             : `<b>${SIS.esc(name.slice(0, 2).toUpperCase())}</b>`;
+        document.querySelectorAll('.user-chip').forEach(c => c.innerHTML = html + SIS.esc(name));
+        document.querySelectorAll('.side-foot b').forEach(b => b.textContent = name);
+    }
+
+    renderAvatar(user.photo);
+    document.getElementById('whoName').textContent = user.fullName || user.studentNo;
+    document.getElementById('studentNoBox').value = user.studentNo;
+    document.getElementById('fullName').value = user.fullName || '';
+    document.getElementById('email').value = user.email || '';
+
+    /* ---- photo upload ---- */
+    box.addEventListener('click', () => photoInput.click());
+    document.getElementById('uploadBtn').addEventListener('click', () => photoInput.click());
+    photoInput.addEventListener('change', async e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+            pendingPhoto = await SIS.fileToAvatarDataUrl(file);
+            renderAvatar(pendingPhoto);
+            SIS.toast('Photo ready — press “Save profile” to keep it.');
+        } catch (err) { SIS.toast(err.message); }
+        e.target.value = '';
+    });
+    document.getElementById('removePhoto').addEventListener('click', () => {
+        pendingPhoto = null;
+        renderAvatar(null);
+    });
+
+    /* ---- save ---- */
+    document.getElementById('saveProfile').addEventListener('click', () => {
+        const errBox = document.getElementById('profileError');
+        errBox.classList.remove('on');
+        const res = SIS.updateProfile({
+            fullName: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            photo: pendingPhoto,
+        });
+        if (res.error) { errBox.textContent = res.error; errBox.classList.add('on'); return; }
+        pendingPhoto = undefined;                       // photo is saved — no longer "pending"
+        document.getElementById('whoName').textContent = res.user.fullName;
+        renderAvatar(res.user.photo);
+        syncChips(res.user);
+        SIS.toast('Profile updated.');
+    });
+})();
+</script>
+</body>
+</html>

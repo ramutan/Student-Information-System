@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>IV. Family Data — Registrar SIS</title>
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-title="IV. Family Data">
@@ -20,19 +21,16 @@
                         <label class="field">Occupation<input name="fatherOccupation" placeholder="e.g. Software Developer"></label>
                         <label class="field">Company name<input name="fatherCompany"></label>
                     </div>
-
-                     <div class="grid g3">
+                    <div class="grid g3">
                         <label class="field">Company address<input name="fatherCompanyAddress"></label>
                         <label class="field">Telephone no.<input name="fatherPhone"></label>
                         <label class="field">Father's email address<input type="email" name="fatherEmail"></label>
                     </div>
-
                     <div class="grid g3">
-                        <label class="field">Mother's name<input name="motherName" placeholder="e.g. Maria Santos "></label>
+                        <label class="field">Mother's name<input name="motherName" placeholder="e.g. Maria Mae"></label>
                         <label class="field">Occupation<input name="motherOccupation" placeholder="e.g. Call center agent"></label>
                         <label class="field">Company name<input name="motherCompany"></label>
                     </div>
-
                     <div class="grid g3">
                         <label class="field">Company address<input name="motherCompanyAddress"></label>
                         <label class="field">Telephone no.<input name="motherPhone"></label>
@@ -76,6 +74,7 @@
         list.appendChild(div);
     }
 
+    /* hooks used by SIS.bindSection() */
     window.collectExtra = obj => {
         obj.siblings = [...list.querySelectorAll('.row-dyn')].map(r => ({
             name: r.querySelector('[name="sibName"]').value.trim(),

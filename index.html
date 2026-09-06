@@ -2,53 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registar - Student Information System (SIS)</title>
-    <meta name="description" content="Sign in to the Student Information System.">
-    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <title>Registrar — Student Information System</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="auth-body">
+<button type="button" class="theme-float theme-toggle" onclick="SIS.toggleTheme()" aria-label="Toggle theme"></button>
+
 <main class="auth-wrap">
-    <section class="auth-brand>
+    <section class="auth-brand">
         <div class="logo">R</div>
-        <h1>REGISTAR</h1>
-        <p class="tagline">STUDENT INFORMATION SYSTEM (SIS)</p>
+        <h1>REGISTRAR</h1>
+        <p class="tagline">STUDENT INFORMATION SYSTEM</p>
         <ul>
             <li>General Student Personal Information Sheet (GSPIS)</li>
-            <li>Residence, family &amp; education background</li>
+            <li>Residence, family &amp; educational background</li>
             <li>General qualifications &amp; references</li>
             <li>Printable, save-as-you-go records</li>
         </ul>
-        <div class="foot">Record are stored privately in this browser.</div>
+        <div class="foot">One account per student number · Records stay in this browser.</div>
     </section>
 
     <section class="auth-panel">
         <div class="tabs">
-            <button type="button" class="tab active" id="tablogin">Sign in</button>
-            <button type="button" class="tab" id="tabSignup">Create Account</button>
+            <button type="button" class="tab active" id="tabLogin">Sign in</button>
+            <button type="button" class="tab" id="tabSignup">Create account</button>
         </div>
 
         <form id="loginForm" class="auth-form" novalidate>
             <h2>Welcome back</h2>
-            <p class="sub">Sign in to continue to your information sheet.</p>
-            <label class="field">Username or email<input name="identifier" autocomplete="username"></label>
-            <label class="field">Password<input type="password" name="password" autocomplete="current-password"></label>
+            <p class="sub">Sign in with your student number or email.</p>
+            <label class="field">Student number or email<input name="identifier" placeholder="e.g. 23-2033-379" autocomplete="username"></label>
+            <label class="field">Password
+                <div class="pw-wrap">
+                    <input type="password" name="password" autocomplete="current-password">
+                    <button type="button" class="pw-eye" aria-label="Show password"></button>
+                </div>
+            </label>
             <div class="form-error" id="loginError"></div>
-            <button class="btn primary block">Sign in →</button>
+            <button type="submit" class="btn primary block">Sign in →</button>
         </form>
 
-         <form id="signupForm" class="auth-form hidden" novalidate>
+        <form id="signupForm" class="auth-form hidden" novalidate>
             <h2>Create your account</h2>
-            <p class="sub">One account per student. You'll fill out the information sheet after signing up.</p>
-            <label class="field">Username<input name="username" autocomplete="username"></label>
-            <label class="field">Email address<input type="email" name="email" autocomplete="email"></label>
-            <label class="field">Student number <span class="opt">(optional)</span><input name="studentNo" placeholder="e.g. 23-2033-379"></label>
+            <p class="sub">One account per student number and per email address.</p>
+            <label class="field">Full name<input name="fullName" placeholder="e.g. Prince Ram R. Igna" autocomplete="name"></label>
+            <label class="field">Email address<input type="email" name="email" placeholder="name@gmail.com" autocomplete="email"></label>
+            <label class="field">Student number<input name="studentNo" placeholder="e.g. 23-2033-379"></label>
             <div class="grid g2">
-                <label class="field">Password<input type="password" name="password" autocomplete="new-password"></label>
-                <label class="field">Confirm password<input type="password" name="confirm" autocomplete="new-password"></label>
+                <label class="field">Password
+                    <div class="pw-wrap">
+                        <input type="password" name="password" autocomplete="new-password">
+                        <button type="button" class="pw-eye" aria-label="Show password"></button>
+                    </div>
+                </label>
+                <label class="field">Confirm password
+                    <div class="pw-wrap">
+                        <input type="password" name="confirm" autocomplete="new-password">
+                        <button type="button" class="pw-eye" aria-label="Show password"></button>
+                    </div>
+                </label>
             </div>
+            <ul class="pw-rules" id="pwRules"></ul>
             <div class="form-error" id="signupError"></div>
-            <button class="btn primary block">Create account →</button>
+            <button type="submit" class="btn primary block">Create account →</button>
         </form>
     </section>
 </main>

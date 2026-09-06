@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="author" content="Prince Ram">
-        <title>III. Physical Description - Registrat SIS</title>
-        <link rel="stylesheet.css" href="css/style.css">
-    </head>
-    <body date-title="III. Physical Description">
-    <div class="app">
-        <aside class="sidebar" id="sidebar"></aside>
-        <main class="main">
-            <header class="topbar" id="topbar"></header>
-            <div class="content">
-                <form id="sectionForm" class="sheet-card">
-                    <div class="band">III. Physical Description</div>
-                    <div class="sheet-body">
-                        <div class="grid g4">
-                            <label class="field">Height (cm)<input type="number" step="0.1" name="heightCm" placeholder="e.g. 170 cm"></label>
-                            <label class="field">Weight (kg)<input type="number" step="0.1" name="weightKg" placeholder="e.g. 62 kg"></label>
-
-                            <label class="field">Built
-                                <select name="built"><option value="">Choose…</option><option>Small</option><option>Medium</option><option>Large</option><option>Athletic</option></select>
-                            </label>
-
-                            <label class="field">Eye color<input name="eyeColor" placeholder="e.g. Dark brown"></label>
-                        </div>
-
-                        <div class="grid g2">
-                            <label class="field">Hair color<input name="hairColor" placeholder="e.g. Black"></label>
-                            <label class="field">Complexion
-                                <select name="complexion"><option value="">Choose…</option><option>Fair</option><option>Medium</option><option>Morena</option><option>Dark</option></select>
-                            </label>
-                        </div>
-
-                        <label class="field">Other distinguishing features<input name="otherFeatures"></label>
-                        <label class="field">Physical handicap or disability (if any)<input name="disability"></label>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>III. Physical Description — Registrar SIS</title>
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="III. Physical Description">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+            <form id="sectionForm" class="sheet-card">
+                <div class="band">III · Physical Description</div>
+                <div class="sheet-body">
+                    <div class="grid g4">
+                        <label class="field">Height (cm)<input type="number" step="0.1" name="heightCm" placeholder="e.g. 170"></label>
+                        <label class="field">Weight (kg)<input type="number" step="0.1" name="weightKg" placeholder="e.g. 62"></label>
+                        <label class="field">Built
+                            <select name="built"><option value="">Choose…</option><option>Small</option><option>Medium</option><option>Large</option><option>Athletic</option></select>
+                        </label>
+                        <label class="field">Eye color<input name="eyeColor" placeholder="e.g. Dark brown"></label>
                     </div>
-
-                    <div class="actions">
-                        <span class="stamp" id="savedStamp"></span>
-                        <button type="button" class="btn ghost" id="resetBtn">Reset</button>
-                        <button type="button" class="btn primary" id="savedBtn">Saved changes</button>
+                    <div class="grid g2">
+                        <label class="field">Hair color<input name="hairColor" placeholder="e.g. Black"></label>
+                        <label class="field">Complexion
+                            <select name="complexion"><option value="">Choose…</option><option>Fair</option><option>Medium</option><option>Morena</option><option>Dark</option></select>
+                        </label>
                     </div>
-                </form>
-            </div>
-        </main>
-    </div>
-    <script src="js/store.js"></script>
-    <script src="js/layout.js"></script>
-    <script>SIS.bindSection('physical');</script>
+                    <label class="field">Other distinguishing features<input name="otherFeatures"></label>
+                    <label class="field">Physical handicap or disability (if any)<input name="disability"></label>
+                </div>
+                <div class="actions">
+                    <span class="stamp" id="savedStamp"></span>
+                    <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                    <button type="button" class="btn primary" id="saveBtn">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>SIS.bindSection('physical');</script>
 </body>
 </html>
