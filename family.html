@@ -57,8 +57,40 @@
         </div>
     </main>
 </div>
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>
+(function () {
+    const list = document.getElementById('siblingRows');
 
+    function addRow(v = {}) {
+        const div = document.createElement('div');
+        div.className = 'row-dyn';
+        div.innerHTML = `
+            <label class="field">Name<input name="sibName" value="${SIS.esc(v.name || '')}"></label>
+            <label class="field">Date of birth<input type="date" name="sibDob" value="${SIS.esc(v.dob || '')}"></label>
+            <label class="field">Course / occupation<input name="sibCourse" value="${SIS.esc(v.course || '')}"></label>
+            <label class="field">School / company<input name="sibSchool" value="${SIS.esc(v.school || '')}"></label>
+            <button type="button" class="row-del" title="Remove sibling">✕</button>`;
+        div.querySelector('.row-del').addEventListener('click', () => div.remove());
+        list.appendChild(div);
+    }
 
+    window.collectExtra = obj => {
+        obj.siblings = [...list.querySelectorAll('.row-dyn')].map(r => ({
+            name: r.querySelector('[name="sibName"]').value.trim(),
+            dob: r.querySelector('[name="sibDob"]').value,
+            course: r.querySelector('[name="sibCourse"]').value.trim(),
+            school: r.querySelector('[name="sibSchool"]').value.trim(),
+        })).filter(s => s.name || s.dob || s.course || s.school);
+    };
+    window.applyExtra = vals => {
+        (vals.siblings && vals.siblings.length ? vals.siblings : [{}]).forEach(addRow);
+    };
+
+    document.getElementById('addSibling').addEventListener('click', () => addRow());
+    SIS.bindSection('family');
+})();
+</script>
 </body>
-
 </html>
