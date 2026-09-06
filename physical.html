@@ -13,7 +13,7 @@
         <main class="main">
             <header class="topbar" id="topbar"></header>
             <div class="content">
-                <form id="sectionForm" class="sheet-card"></form>
+                <form id="sectionForm" class="sheet-card">
                     <div class="band">III. Physical Description</div>
                     <div class="sheet-body">
                         <div class="grid g4">
@@ -34,12 +34,21 @@
                             </label>
                         </div>
 
-                        
+                        <label class="field">Other distinguishing features<input name="otherFeatures"></label>
+                        <label class="field">Physical handicap or disability (if any)<input name="disability"></label>
                     </div>
+
+                    <div class="actions">
+                        <span class="stamp" id="savedStamp"></span>
+                        <button type="button" class="btn ghost" id="resetBtn">Reset</button>
+                        <button type="button" class="btn primary" id="savedBtn">Saved changes</button>
+                    </div>
+                </form>
             </div>
-
         </main>
-
     </div>
-    </body>
+    <script src="js/store.js"></script>
+    <script src="js/layout.js"></script>
+    <script>SIS.bindSection('physical');</script>
+</body>
 </html>
