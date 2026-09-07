@@ -40,7 +40,7 @@ Developer of the Student Information System
 | CSS3       | Styling, layout, and responsiveness |
 | JavaScript | Application Logic and Interactivity |
 | SQL        | Database for the project |
-| React      | stores information |
+
 
 ---
 
