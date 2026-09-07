@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <title>Admin — Registrar SIS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="Admin">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content" style="max-width:1200px">
+            <section class="sheet-card">
+                <div class="band">⚙ Admin Panel — all registered users</div>
+                <div class="sheet-body">
+                    <p class="subnote"><b>Reset password</b> gives the student a temporary password (nobody can view existing passwords — they're encrypted). <b>Clear records</b> keeps the account but empties their sheet. <b>Delete user</b> removes everything.</p>
+                    <div style="overflow-x:auto">
+                        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+                            <thead><tr>
+                                <th style="text-align:left;padding:8px;border-bottom:2px solid var(--line)">STUDENT NO</th>
+                                <th style="text-align:left;padding:8px;border-bottom:2px solid var(--line)">NAME</th>
+                                <th style="text-align:left;padding:8px;border-bottom:2px solid var(--line)">EMAIL</th>
+                                <th style="text-align:center;padding:8px;border-bottom:2px solid var(--line)">PROGRESS</th>
+                                <th style="text-align:left;padding:8px;border-bottom:2px solid var(--line)">LAST SAVED</th>
+                                <th style="text-align:left;padding:8px;border-bottom:2px solid var(--line)">ACTIONS</th>
+                            </tr></thead>
+                            <tbody id="tbody"><tr><td colspan="6" style="padding:14px;color:var(--muted)">Loading…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="actions">
+                    <span class="stamp" id="count"></span>
+                    <button type="button" class="btn primary sm" id="axExcel">⇩ Excel (.xls)</button>
+                    <button type="button" class="btn primary sm" id="axPdf">⇩ PDF report</button>
+                    <button type="button" class="btn ghost sm" id="axCsv">⇩ CSV</button>
+                    <button type="button" class="btn ghost sm" id="axPrint">⎙ Print report</button>
+                </div>
+            </section>
+
+            <section class="sheet-card">
+                <div class="band">Change my admin password</div>
+                <form class="sheet-body" id="pwForm" novalidate>
+                    <div class="grid g3">
+                        <label class="field">Current password
+                            <div class="pw-wrap"><input type="password" name="current"><button type="button" class="pw-eye"></button></div>
+                        </label>
+                        <label class="field">New password
+                            <div class="pw-wrap"><input type="password" name="next"><button type="button" class="pw-eye"></button></div>
+                        </label>
+                        <label class="field">Confirm new password<input type="password" name="confirm"></label>
+                    </div>
+                    <div class="form-error" id="pwError"></div>
+                    <div><button type="submit" class="btn primary sm">Update password</button></div>
+                </form>
+            </section>
+        </div>
+    </main>
+</div>
+<script src="js/store.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="js/export.js"></script>
+<script>
+let DATA = { users: [], records: {} };
+
+SIS.onReady(async () => {
+    const me = SIS.currentUser();
+    if (!me) { location.replace('index.html'); return; }
+    if (me.role !== 'admin') { location.replace('dashboard.html'); return; }
+
+    /* simple chrome */
+    document.getElementById('sidebar').innerHTML = `
+        <div class="side-brand"><div class="logo">R</div><div><h1>REGISTRAR</h1><p>ADMIN</p></div></div>
+        <nav>
+            <a href="dashboard.html"><span class="num">⌂</span>Dashboard</a>
+            <a href="admin.html" class="active"><span class="num">⚙</span>Admin</a>
+        </nav>
+        <div class="side-foot">Signed in as<br><b>${SIS.esc(me.studentNo)}</b></div>`;
+    document.getElementById('topbar').innerHTML = `
+        <h2 class="page-title">Admin Panel</h2>
+        <div class="top-right">
+            <button type="button" class="btn ghost sm icon-btn theme-toggle" onclick="SIS.toggleTheme()"></button>
+            <button type="button" class="btn ghost sm" onclick="SIS.logout()">Logout</button>
+        </div>`;
+    SIS.setTheme(SIS.getTheme());
+
+    await loadData();
+
+    document.getElementById('axExcel').onclick = () => SIS.report.toExcel(DATA);
+    document.getElementById('axPdf').onclick   = () => SIS.report.toPdf(DATA);
+    document.getElementById('axCsv').onclick   = () => SIS.report.toCsv(DATA);
+    document.getElementById('axPrint').onclick = () => SIS.report.print(DATA);
+
+    document.getElementById('pwForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const f = e.target, box = document.getElementById('pwError');
+        box.classList.remove('on');
+        if (f.next.value !== f.confirm.value) { box.textContent = 'New passwords do not match.'; box.classList.add('on'); return; }
+        const res = await SIS.changePassword(f.current.value, f.next.value);
+        if (res.error) { box.textContent = res.error; box.classList.add('on'); return; }
+        f.reset(); SIS.toast('Admin password updated.');
+    });
+});
+
+async function loadData() {
+    const res = await fetch('/api/admin/data', { credentials: 'same-origin' });
+    if (!res.ok) { SIS.toast('Could not load users.'); return; }
+    DATA = await res.json();
+
+    const rows = DATA.users.map(u => {
+        const d = DATA.records[u.studentNo] || {};
+        let f = 0, t = 0, last = 0;
+        for (const s of SIS.SECTIONS) {
+            const vals = d[s.key] || {};
+            for (const k of s.fields) { t++; const v = vals[k]; if (Array.isArray(v) ? v.length : (v !== undefined && String(v).trim() !== '')) f++; }
+            if (vals._savedAt > last) last = vals._savedAt;
+        }
+        const pct = t ? Math.round(f / t * 100) : 0;
+        const admin = u.role === 'admin';
+        return `<tr>
+            <td style="padding:8px;border-bottom:1px solid var(--line);white-space:nowrap"><b>${SIS.esc(u.studentNo)}</b>${admin ? ' ⚙' : ''}</td>
+            <td style="padding:8px;border-bottom:1px solid var(--line)">${SIS.esc(u.fullName || '—')}</td>
+            <td style="padding:8px;border-bottom:1px solid var(--line)">${SIS.esc(u.email || '—')}</td>
+            <td style="padding:8px;border-bottom:1px solid var(--line);text-align:center">${pct}%</td>
+            <td style="padding:8px;border-bottom:1px solid var(--line);white-space:nowrap">${last ? new Date(last).toLocaleDateString() : 'never'}</td>
+            <td style="padding:8px;border-bottom:1px solid var(--line);white-space:nowrap">
+                ${admin ? '<span style="color:var(--muted)">—</span>' : `
+                <button type="button" class="btn ghost sm" onclick="resetPw('${SIS.esc(u.studentNo)}')">Reset password</button>
+                <button type="button" class="btn ghost sm" onclick="clearRec('${SIS.esc(u.studentNo)}')">Clear records</button>
+                <button type="button" class="btn danger sm" onclick="delUser('${SIS.esc(u.studentNo)}')">Delete</button>`}
+            </td></tr>`;
+    }).join('');
+    document.getElementById('tbody').innerHTML = rows || '<tr><td colspan="6" style="padding:14px;color:var(--muted)">No accounts yet.</td></tr>';
+    document.getElementById('count').textContent = DATA.users.length + ' account(s)';
+}
+
+async function post(url) {
+    const r = await fetch(url, { method: 'POST', credentials: 'same-origin' });
+    return r.json();
+}
+async function resetPw(sno) {
+    if (!confirm('Reset the password for "' + sno + '"?')) return;
+    const r = await post('/api/admin/users/' + encodeURIComponent(sno) + '/reset');
+    if (r.error) return SIS.toast(r.error);
+    prompt('Temporary password for ' + sno + ' — give this to the student:', r.temp);
+    loadData();
+}
+async function clearRec(sno) {
+    if (!confirm('Clear ALL typed records for "' + sno + '"? Their account stays.')) return;
+    const r = await post('/api/admin/users/' + encodeURIComponent(sno) + '/clear');
+    SIS.toast(r.error || (sno + "'s records cleared."));
+    loadData();
+}
+async function delUser(sno) {
+    if (!confirm('DELETE user "' + sno + '" and all their data permanently?')) return;
+    const r = await post('/api/admin/users/' + encodeURIComponent(sno) + '/delete');
+    SIS.toast(r.error || (sno + ' deleted.'));
+    loadData();
+}
+</script>
+</body>
+</html>

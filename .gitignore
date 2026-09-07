@@ -1,0 +1,5 @@
+node_modules/
+sis.db
+sis.db-wal
+sis.db-shm
+.env

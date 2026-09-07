@@ -49,8 +49,8 @@
 <script src="js/store.js"></script>
 <script src="js/layout.js"></script>
 <script>
-(function () {
-    const user = SIS.currentUser();
+SIS.onReady(async function () {
+    let user = SIS.currentUser();
     if (!user) { location.replace('index.html'); return; }
 
     let pendingPhoto;                       // undefined = unchanged, null = removed, string = new
@@ -67,10 +67,11 @@
                              : `<b>${SIS.esc(name.slice(0, 2).toUpperCase())}</b>`;
         document.querySelectorAll('.user-chip').forEach(c => c.innerHTML = html + SIS.esc(name));
         document.querySelectorAll('.side-foot b').forEach(b => b.textContent = name);
+        document.getElementById('whoName').textContent = name;
     }
 
+    /* ---- initial fill ---- */
     renderAvatar(user.photo);
-    document.getElementById('whoName').textContent = user.fullName || user.studentNo;
     document.getElementById('studentNoBox').value = user.studentNo;
     document.getElementById('fullName').value = user.fullName || '';
     document.getElementById('email').value = user.email || '';
@@ -93,23 +94,23 @@
         renderAvatar(null);
     });
 
-    /* ---- save ---- */
-    document.getElementById('saveProfile').addEventListener('click', () => {
+    /* ---- save (async — server call) ---- */
+    document.getElementById('saveProfile').addEventListener('click', async () => {
         const errBox = document.getElementById('profileError');
         errBox.classList.remove('on');
-        const res = SIS.updateProfile({
+        const res = await SIS.updateProfile({
             fullName: document.getElementById('fullName').value,
             email: document.getElementById('email').value,
             photo: pendingPhoto,
         });
         if (res.error) { errBox.textContent = res.error; errBox.classList.add('on'); return; }
-        pendingPhoto = undefined;                       // photo is saved — no longer "pending"
-        document.getElementById('whoName').textContent = res.user.fullName;
-        renderAvatar(res.user.photo);
-        syncChips(res.user);
+        pendingPhoto = undefined;
+        Object.assign(user, res.user);      // refresh local copy so avatars use the new name
+        renderAvatar(user.photo);
+        syncChips(user);
         SIS.toast('Profile updated.');
     });
-})();
+});
 </script>
 </body>
 </html>

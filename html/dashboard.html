@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('sis_theme') || 'dark';</script>
+    <title>Dashboard — Registrar SIS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-title="Dashboard">
+<div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <main class="main">
+        <header class="topbar" id="topbar"></header>
+        <div class="content">
+
+            <!-- ===== hero / progress ===== -->
+            <section class="sheet-card dash-hero">
+                <div class="band">General Student Personal Information Sheet (GSPIS)</div>
+                <div class="sheet-body">
+                    <h2 id="welcome"></h2>
+                    <p class="subnote">Complete all seven (7) sections below. Every section is saved when you press “Save changes”, and your progress is tracked automatically.</p>
+                    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+                    <div class="prog-caption" id="progCaption"></div>
+                </div>
+            </section>
+
+            <div class="dash-grid">
+                <!-- ===== left: sections checklist ===== -->
+                <section>
+                    <h3 class="sec-title">Information sheet sections</h3>
+                    <div class="checklist" id="checklist"></div>
+                </section>
+
+                <!-- ===== right: account + password ===== -->
+                <section>
+                    <h3 class="sec-title">My account</h3>
+                    <div class="sheet-card">
+                        <div class="sheet-body" id="accountInfo"></div>
+                    </div>
+
+                    <div class="sheet-card">
+                        <div class="band">Change password</div>
+                        <form class="sheet-body" id="pwForm" novalidate>
+                            <label class="field">Current password
+                                <div class="pw-wrap"><input type="password" name="current" autocomplete="current-password"><button type="button" class="pw-eye" aria-label="Show password"></button></div>
+                            </label>
+                            <label class="field">New password
+                                <div class="pw-wrap"><input type="password" name="next" autocomplete="new-password"><button type="button" class="pw-eye" aria-label="Show password"></button></div>
+                            </label>
+                            <ul class="pw-rules" id="pwRulesDash"></ul>
+                            <label class="field">Confirm new password
+                                <div class="pw-wrap"><input type="password" name="confirm" autocomplete="new-password"><button type="button" class="pw-eye" aria-label="Show password"></button></div>
+                            </label>
+                            <div class="form-error" id="pwError"></div>
+                            <div><button type="submit" class="btn primary">Update password</button></div>
+                        </form>
+                    </div>
+
+                    <button type="button" class="btn danger sm no-print" onclick="wipe()">Delete all my records</button>
+                </section>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- ⚠️ ORDER MATTERS: store.js → PDF libraries → export.js → layout.js → page script -->
+<script src="js/store.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<!-- server mode: exports moved to admin.html, so dashboard needs NO pdf/csv scripts -->
+<script src="js/store.js"></script>
+<script src="js/layout.js"></script>
+<script>
+SIS.onReady(async function () {
+    const user = SIS.currentUser();
+    if (!user) { location.replace('index.html'); return; }
+
+    /* ---------- hero ---------- */
+    const prog = SIS.progress();
+    document.getElementById('welcome').textContent = 'Welcome, ' + (user.fullName || user.studentNo) + '.';
+    document.getElementById('progFill').style.width = prog.percent + '%';
+    document.getElementById('progCaption').textContent = prog.percent + '% of your information sheet is complete.';
+
+    /* ---------- sections checklist ---------- */
+    const statusOf = key => {
+        const p = prog.per[key];
+        return p.total > 0 && p.filled === p.total ? 'done' : (p.filled ? 'partial' : 'empty');
+    };
+    const statusLabel = { done: 'Complete', partial: 'In progress', empty: 'Empty' };
+
+    document.getElementById('checklist').innerHTML = SIS.SECTIONS.map(s => {
+        const st = statusOf(s.key);
+        return `<a class="check-item" href="${s.href}">
+            <span class="num">${s.num}</span>
+            <span><strong>${s.label}</strong><br><small>${prog.per[s.key].filled} of ${prog.per[s.key].total} fields filled</small></span>
+            <span class="chip ${st}">${statusLabel[st]}</span></a>`;
+    }).join('');
+
+    /* ---------- my account card ---------- */
+    document.getElementById('accountInfo').innerHTML = `
+        <label class="field">Full name<input value="${SIS.esc(user.fullName || '— not set —')}" disabled></label>
+        <label class="field">Email address<input value="${SIS.esc(user.email || '— not set —')}" disabled></label>
+        <label class="field">Student number<input value="${SIS.esc(user.studentNo)}" disabled></label>
+        <a class="btn ghost sm" href="profile.html">✎ Edit profile &amp; photo</a>`;
+
+    /* ---------- change password (async — talks to the server now) ---------- */
+    SIS.attachPwChecklist(document.querySelector('#pwForm [name="next"]'), document.getElementById('pwRulesDash'));
+
+    document.getElementById('pwForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const f = e.target, box = document.getElementById('pwError');
+        box.classList.remove('on');
+        if (f.next.value !== f.confirm.value) { box.textContent = 'New passwords do not match.'; box.classList.add('on'); return; }
+        const res = await SIS.changePassword(f.current.value, f.next.value);
+        if (res.error) { box.textContent = res.error; box.classList.add('on'); return; }
+        f.reset();
+        f.next.dispatchEvent(new Event('input'));   // reset the ✓ checklist
+        SIS.toast('Password updated.');
+    });
+});
+
+/* ---------- wipe own records (async — server call) ---------- */
+async function wipe() {
+    if (confirm('Permanently delete ALL of your saved records? This cannot be undone.')) {
+        const r = await SIS.wipeRecords();
+        if (r && r.error) return SIS.toast(r.error);
+        location.reload();
+    }
+}
+</script>
+</body>
+</html>
