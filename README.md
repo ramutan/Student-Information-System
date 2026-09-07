@@ -11,7 +11,7 @@ A web application built to digitize student records using HTML, CSS, and JS. Man
 - [About](#about)
 - [Author](#author)
 - [Tech Stack](#tech-stack)
-- [Key Features](#features)
+- [Key Features](#key-features)
 - [Project Structure](#project-structure)
 - [Purpose](#purpose)
 - [Roadmap](#roadmap)
