@@ -71,6 +71,7 @@ student-information-system/
 └── js/
     ├── store.js          → Data layer (accounts + records, localStorage)
     ├── layout.js         → Builds sidebar/topbar on every page
+    ├── export.js         → This is for the pdf, excel and export section
     └── auth.js           → Login & signup logic
 ```
 
