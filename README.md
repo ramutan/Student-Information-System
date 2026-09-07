@@ -1,5 +1,8 @@
 # Student-Information-System
+
 A web application built to digitize student records using HTML, CSS, and JS. Manages core demographics, student numbers, addresses, personal phone numbers, and parent details (mother &amp; father). Features dual-email tracking for personal and Perpetual institutional accounts in a clean, responsive client-side dashboard.
+
+
 
 ---
 
@@ -8,7 +11,7 @@ A web application built to digitize student records using HTML, CSS, and JS. Man
 - [About](#about)
 - [Author](#author)
 - [Tech Stack](#tech-stack)
-- [Key Features](#features)
+- [Key Features](#key-features)
 - [Project Structure](#project-structure)
 - [Purpose](#purpose)
 - [Roadmap](#roadmap)
@@ -36,6 +39,8 @@ Developer of the Student Information System
 | HTML 5     | Markup and page structures |
 | CSS3       | Styling, layout, and responsiveness |
 | JavaScript | Application Logic and Interactivity |
+| SQL        | Database for the project |
+
 
 ---
 
@@ -50,6 +55,8 @@ Developer of the Student Information System
 * **Contact & Demographics:** Stores residential addresses and direct personal phone numbers.
 
 * **Responsive Dashboard:** Simple, accessible user interface optimized for desktop and mobile views.
+
+* **Live Hosting: (Backend needed)** Database SQL 
 
 ---
 
@@ -66,12 +73,15 @@ student-information-system/
 ├── education.html        → V. Educational Background
 ├── qualification.html    → VI. General Qualification
 ├── references.html       → VII. References
+├── profile.html          → VIII. Profile Edit (profile upload png & joeg, edit full name and username)
 ├── css/
 │   └── style.css         → Shared stylesheet
 └── js/
     ├── store.js          → Data layer (accounts + records, localStorage)
     ├── layout.js         → Builds sidebar/topbar on every page
+    ├── export.js         → This is for the pdf, excel and export section
     └── auth.js           → Login & signup logic
+
 ```
 
 ---
