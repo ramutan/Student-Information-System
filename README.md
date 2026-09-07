@@ -1,10 +1,8 @@
 # Student-Information-System
 
-A web application built to digitize student records using HTML, CSS, and JS. Manages core demographics, student numbers, addresses, personal phone numbers, and parent details (mother &amp; father). Features dual-email tracking for personal and Perpetual institutional accounts in a clean, responsive client-side dashboard.
+A full-stack web application that digitizes the General Student Personal Information Sheet (GSPIS) — covering personal data, residence, physical description, family background, educational background, general qualifications, and references. Built with plain HTML, CSS, and JavaScript on the front end, powered by a Node.js + Express server with a SQLite database on the back end.
 
-
-
----
+Students register an account, fill out their information sheet section by section with live progress tracking, and manage their profile — while the admin oversees all accounts and records from a dedicated control panel with Excel, PDF, CSV, and print exports.
 
 ## Table of Contents
 
@@ -17,102 +15,105 @@ A web application built to digitize student records using HTML, CSS, and JS. Man
 - [Roadmap](#roadmap)
 - [License](#license)
 
----
+## About
 
-## About 
-
-This application serves as a centralized platform for managing student profiles, contact details, and family records. Built using plain HTML, CSS, and JavaScript, it focuses on fast client-side performance, responsive design, and intuitive data handling without relying on heavy external frameworks.
-
----
+This application serves as a centralized platform for managing student records. What began as a client-side exercise evolved into a complete full-stack system: a REST API backed by a real SQL database handles authentication (with bcrypt-hashed passwords and server sessions), stores every submission, and gives the administrator full visibility and control over all user accounts and their information sheets.
 
 ## Author
 
 **Prince Ram Roydlikent F. Igna**
 Developer of the Student Information System
 
----
-
 ## Tech Stack
 
 | Technology | Purpose |
-|------------|---------|
-| HTML 5     | Markup and page structures |
-| CSS3       | Styling, layout, and responsiveness |
-| JavaScript | Application Logic and Interactivity |
-| SQL        | Database for the project |
-
-
----
+|---|---|
+| HTML5 | Markup and page structures |
+| CSS3 | Styling, layout, responsiveness, dark/light themes |
+| JavaScript | Front-end application logic + server-side (Node.js) |
+| Node.js + Express | REST API and static file server |
+| SQLite (better-sqlite3) | SQL database for users and records |
+| bcryptjs | Password hashing |
+| express-session | Login sessions |
+| jsPDF + AutoTable | PDF report generation |
 
 ## Key Features
 
-* **Student Identity Tracking:** Records unique Student Numbers, full names, Date of Birth, and calculated age.
-
-* **Dual-Email System:** Manages institutional **Perpetual email** accounts alongside **personal email** addresses for effective communication.
-
-* **Parent & Guardian Records:** Keeps organized records of parents' names (Father & Mother) for administrative and emergency reference.
-
-* **Contact & Demographics:** Stores residential addresses and direct personal phone numbers.
-
-* **Responsive Dashboard:** Simple, accessible user interface optimized for desktop and mobile views.
-
-* **Live Hosting: (Backend needed)** Database SQL 
-
----
+- **Account System**: Students sign up with full name, email, and student number (both unique per account), with live password requirement checks and show/hide password toggles. Login accepts either student number or email.
+- **7-Section Information Sheet (GSPIS)**: Personal Data (incl. Alien Status), Residence Data, Physical Description, Family Data (with dynamic sibling rows), Educational Background, General Qualification, and References.
+- **Progress Tracking**: Live completion percentage per section and overall, shown on the dashboard and topbar.
+- **User Profiles**: Editable full name and email, with photo upload (automatically resized and stored on the server).
+- **Admin Panel**: Role-based access — the admin can view all registered users, monitor per-user progress and last-saved dates, reset passwords (secure temporary passwords), clear records, delete accounts, and export everything.
+- **Report Exports**: Formatted Excel (.xls) with grouped section headers, per-user PDF reports, raw CSV, and a print-friendly report — covering every account and every answer.
+- **Dark & Light Mode**: Theme toggle on every page, persisted across sessions.
+- **Security**: Passwords are bcrypt-hashed (never stored or viewable in plain text), sessions are server-managed, and admin routes are protected server-side.
+- **Responsive Design**: Optimized for desktop, tablet, and mobile.
 
 ## Project Structure
 
 ```
-student-information-system/
-├── index.html            → Login / Sign up
-├── dashboard.html        → Progress overview + account settings
-├── personal.html         → I. Personal Data (incl. I-B Alien Status)
-├── residence.html        → II. Residence Data
-├── physical.html         → III. Physical Description
-├── family.html           → IV. Family Data
-├── education.html        → V. Educational Background
-├── qualification.html    → VI. General Qualification
-├── references.html       → VII. References
-├── profile.html          → VIII. Profile Edit (profile upload png & joeg, edit full name and username)
+Student-Information-System/
+│
+── ENTRY POINT ────────────────────────────────────────────
+├── index.html                 # Login / Sign up
+│
+── SERVER ─────────────────────────────────────────────────
+├── lib/
+│   └── server.js              # Express server — REST API + SQLite + sessions
+├── package.json               # Dependencies and scripts
+├── .gitignore                 # Excludes sis.db and node_modules
+│
+── STUDENT & ADMIN PAGES ───────────────────────────────────
+├── src/
+│   ├── dashboard.html         # Progress overview + account settings
+│   ├── profile.html           # Edit name, email, and profile photo
+│   ├── personal.html          # I.    Personal Data (incl. Alien Status)
+│   ├── residence.html         # II.   Residence Data
+│   ├── physical.html          # III.  Physical Description
+│   ├── family.html            # IV.   Family Data
+│   ├── education.html         # V.    Educational Background
+│   ├── qualification.html     # VI.   General Qualification
+│   ├── references.html        # VII.  References
+│   └── admin.html             # Control panel — user management + exports
+│
+── FRONT-END ASSETS ───────────────────────────────────────
 ├── css/
-│   └── style.css         → Shared stylesheet
-└── js/
-    ├── store.js          → Data layer (accounts + records, localStorage)
-    ├── layout.js         → Builds sidebar/topbar on every page
-    ├── export.js         → This is for the pdf, excel and export section
-    └── auth.js           → Login & signup logic
-
+│   └── style.css              # Themes (dark/light), layout, print styles
+│
+├── js/
+│   ├── store.js               # Data layer — REST API client + shared state
+│   ├── layout.js              # Sidebar + topbar builder for every page
+│   ├── auth.js                # Login & signup logic
+│   └── export.js              # Excel / PDF / CSV / print report generator
+│
+── DATABASE (auto-generated, never committed) ─────────────
+└── sis.db                     # SQLite database — created on first run
 ```
-
----
 
 ## Purpose
 
-This project was created as an educational exercise to practice building a functional, client-side web application using plain HTML, CSS, and JavaScript. It focuses on:
+This project began as an exercise in building a functional web application with plain HTML, CSS, and JavaScript — and grew into a full-stack system. It demonstrates:
 
-- Structuring and managing structured data (student records) without a backend or database
-- Practicing form handling, validation, and dynamic DOM manipulation
-- Applying responsive design principles for desktop and mobile views
-- Reinforcing core web development fundamentals without relying on external frameworks
-
-
----
+- Designing a REST API with Express and wiring a front end to it with `fetch`
+- Working with a real SQL database (schema design, prepared statements, upserts)
+- Secure authentication: bcrypt password hashing, server sessions, role-based access control
+- Form handling, validation, and dynamic DOM manipulation without frameworks
+- Client-side file generation (Excel XML, PDF via jsPDF, CSV) and print styling
+- Responsive, themeable UI design with CSS custom properties
 
 ## Roadmap
 
-- [ ] Add data persistence (LocalStorage or backend integration)
-- [ ] Implement search and filter for student records
-- [ ] Add form validation for emails, phone numbers, and required fields
-- [ ] Export student records to CSV/PDF
-- [ ] Add edit and delete functionality for existing records
-- [ ] Introduce basic authentication for admin access
+- [x] Add data persistence (backend integration with SQLite)
+- [x] Export records to CSV / Excel / PDF
+- [x] Add edit functionality for records and profiles
+- [x] Authentication with role-based admin access
+- [x] User management panel (reset passwords, clear/delete accounts)
+- [ ] Search and filter for student records in the admin panel
 - [ ] Improve accessibility (ARIA labels, keyboard navigation)
-
----
+- [ ] Deploy with a persistent disk (Fly.io volume or VPS)
 
 ## License
 
-This project is developed for **educational purposes only**.
+This project is developed for educational purposes only.
 
 © 2026 Prince Ram Roydlikent F. Igna. All Rights Reserved.
-
