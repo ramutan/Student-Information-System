@@ -66,6 +66,7 @@ student-information-system/
 ├── education.html        → V. Educational Background
 ├── qualification.html    → VI. General Qualification
 ├── references.html       → VII. References
+├── profile.html          → VIII. Profile Edit (profile upload png & joeg, edit full name and username)
 ├── css/
 │   └── style.css         → Shared stylesheet
 └── js/
