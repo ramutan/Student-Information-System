@@ -1,12 +1,14 @@
 {
   "name": "sis-server",
   "version": "1.0.0",
-  "main": "server.js",
-  "scripts": { "start": "node lib/server.js" },
+  "main": "lib/server.js",
+  "scripts": {
+    "start": "node lib/server.js"
+  },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "better-sqlite3": "^11.3.0",
-    "bcryptjs": "^2.4.3"
+    "pg": "^8.23.0"
   }
 }
