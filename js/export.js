@@ -1,7 +1,8 @@
 /* ============================================================
-   export.js — formatted Excel / PDF / print reports of ALL users
-   Requires store.js. PDF uses jsPDF + AutoTable (CDN); if the
-   library isn't loaded (offline), PDF falls back to print dialog.
+   export.js — formatted Excel / PDF / CSV / print reports
+   SERVER MODE: callers pass data = { users, records }
+   (fetched from /api/admin/data — see admin.html)
+   PDF uses jsPDF + AutoTable (CDN); falls back to print dialog.
    ============================================================ */
 (function () {
 
@@ -20,7 +21,6 @@
         motherCompanyAddress:"Mother's Company Address", motherPhone:"Mother's Telephone", motherEmail:"Mother's Email",
         refName1:'Reference 1 — Name', refContact1:'Reference 1 — Address / Tel No.',
         refName2:'Reference 2 — Name', refContact2:'Reference 2 — Address / Tel No.',
-        refName3:'Reference 3 — Name', refContact3:'Reference 3 — Address / Tel No.',
     };
     const PREFIX = { elem:'Elementary', hs:'High School', voc:'Vocational', col:'College',
                      pg:'Post-Graduate', cur:'Current', emg:'Emergency', home:'Home' };
@@ -41,7 +41,7 @@
     }
 
     /* ---------- build the full table (used by Excel & CSV) ---------- */
-    function usersTable() {
+    function usersTable(data) {
         const groups = [{ title: 'ACCOUNT', span: 6 }];
         const head = ['Student No', 'Full Name', 'Email', 'Registered', 'Progress', 'Last Saved'];
         for (const s of SIS.SECTIONS) {
@@ -49,23 +49,38 @@
             for (const f of s.fields) head.push(label(f));
         }
         const rows = [];
-        for (const u of SIS.users()) {
-            const d = SIS.getData(u.studentNo);
-            const p = SIS.progress(u.studentNo);
-            let last = 0;
-            for (const v of Object.values(d)) if (v && v._savedAt > last) last = v._savedAt;
+        for (const u of data.users) {
+            const d = data.records[u.studentNo] || {};
+            let f = 0, t = 0, last = 0;
+            for (const s of SIS.SECTIONS) {
+                const vals = d[s.key] || {};
+                for (const k of s.fields) {
+                    t++;
+                    const v = vals[k];
+                    if (Array.isArray(v) ? v.length : (v !== undefined && String(v).trim() !== '')) f++;
+                }
+                if (vals._savedAt > last) last = vals._savedAt;
+            }
             const row = [u.studentNo, u.fullName || '', u.email || '',
                          u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '',
-                         p.percent + '%', last ? new Date(last).toLocaleString() : ''];
-            for (const s of SIS.SECTIONS) for (const f of s.fields) row.push(stringify(f, (d[s.key] || {})[f]));
+                         (t ? Math.round(f / t * 100) : 0) + '%', last ? new Date(last).toLocaleString() : ''];
+            for (const s of SIS.SECTIONS) for (const fld of s.fields) row.push(stringify(fld, (d[s.key] || {})[fld]));
             rows.push(row);
         }
         return { groups, head, rows };
     }
 
+    function download(name, content, type) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([content], { type }));
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
     /* ================= EXCEL (.xls, formatted) ================= */
-    function toExcel() {
-        const { groups, head, rows } = usersTable();
+    function toExcel(data) {
+        const { groups, head, rows } = usersTable(data);
         const X = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         const widths = [85, 135, 175, 95, 70, 135];
 
@@ -97,23 +112,27 @@
                '<TopRowBottomPane>2</TopRowBottomPane><ActivePane>2</ActivePane></WorksheetOptions>' +
                '</Worksheet></Workbook>';
 
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([xml], { type: 'application/vnd.ms-excel' }));
-        a.download = 'sis-users.xls';
-        a.click();
-        URL.revokeObjectURL(a.href);
+        download('sis-users.xls', xml, 'application/vnd.ms-excel');
         SIS.toast('Excel file downloaded.');
     }
 
+    /* ================= CSV (raw) ================= */
+    function toCsv(data) {
+        const { head, rows } = usersTable(data);
+        const csv = [head, ...rows].map(r => r.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
+        download('sis-users.csv', '\ufeff' + csv, 'text/csv;charset=utf-8');
+        SIS.toast('CSV downloaded.');
+    }
+
     /* ================= PDF (formatted report) ================= */
-    function toPdf() {
+    function toPdf(data) {
         if (!(window.jspdf && window.jspdf.jsPDF)) {
             SIS.toast('PDF library not loaded (offline?) — opening print dialog instead.');
-            return printReport();
+            return print(data);
         }
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
-        const users = SIS.users();
+        const users = data.users;
 
         doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(25);
         doc.text('REGISTRAR — Student Information System', 40, 46);
@@ -127,14 +146,13 @@
             if (!first) doc.addPage();
             first = false;
             let y = 52;
-            const d = SIS.getData(u.studentNo);
-            const p = SIS.progress(u.studentNo);
+            const d = data.records[u.studentNo] || {};
 
             doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(25);
             doc.text(u.fullName || u.studentNo, 40, y);
             doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(110);
             y += 14;
-            doc.text(`Student No: ${u.studentNo}    Email: ${u.email || '—'}    Registered: ${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}    Progress: ${p.percent}%`, 40, y);
+            doc.text(`Student No: ${u.studentNo}    Email: ${u.email || '—'}    Registered: ${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}`, 40, y);
             y += 14;
 
             let any = false;
@@ -175,13 +193,12 @@
     }
 
     /* ================= PRINT (fallback / paper) ================= */
-    function reportHtml() {
-        const users = SIS.users();
+    function reportHtml(data) {
+        const users = data.users;
         let html = `<div class="rp-head"><h1>REGISTRAR — STUDENT INFORMATION SYSTEM</h1>
             <p>Users report · ${users.length} account(s) · generated ${new Date().toLocaleString()}</p></div>`;
         for (const u of users) {
-            const d = SIS.getData(u.studentNo);
-            const p = SIS.progress(u.studentNo);
+            const d = data.records[u.studentNo] || {};
             let body = '', any = false;
             for (const s of SIS.SECTIONS) {
                 const trs = [];
@@ -195,18 +212,18 @@
             }
             html += `<div class="rp-user">
                 <h3>${SIS.esc(u.fullName || u.studentNo)} <span>· ${SIS.esc(u.studentNo)}</span></h3>
-                <p class="rp-meta">${SIS.esc(u.email || '—')} · Registered ${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'} · ${p.percent}% complete</p>
+                <p class="rp-meta">${SIS.esc(u.email || '—')} · Registered ${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}</p>
                 ${any ? `<table>${body}</table>` : '<p class="rp-meta">No information sheet data yet.</p>'}
             </div>`;
         }
         return html;
     }
 
-    function printReport() {
+    function print(data) {
         document.getElementById('printReport')?.remove();
         const holder = document.createElement('div');
         holder.id = 'printReport';
-        holder.innerHTML = reportHtml();
+        holder.innerHTML = reportHtml(data);
         document.body.appendChild(holder);
         document.body.classList.add('printing');
         const cleanup = () => { holder.remove(); document.body.classList.remove('printing'); window.removeEventListener('afterprint', cleanup); };
@@ -214,5 +231,5 @@
         window.print();
     }
 
-    SIS.report = { usersTable, toExcel, toPdf, print: printReport };
+    SIS.report = { usersTable, toExcel, toPdf, toCsv, print: printReport };
 })();
