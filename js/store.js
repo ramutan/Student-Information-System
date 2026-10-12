@@ -10,7 +10,7 @@ const SIS = (function () {
         { key: 'family', num: 'IV', label: 'Family Data', href: 'family.html',
           fields: ['fatherName','fatherOccupation','fatherCompany','fatherCompanyAddress','fatherPhone','fatherEmail','motherName','motherOccupation','motherCompany','motherCompanyAddress','motherPhone','motherEmail','siblings'] },
         { key: 'education', num: 'V', label: 'Educational Background', href: 'education.html',
-          fields: ['elemName','elemCourse','elemYear','elemHonors','hsName','hsCourse','hsYear','hsHonors','vocName','vocCourse','vocYear','vocHonors','colName','colCourse','colYear','colHonors','pgName','pgCourse','pgYear','pgHonors'] },
+          fields: ['elemName','elemCourse','elemYear','elemHonors','hsName','hsCourse','hsYear','hsHonors','vocName','vocCourse','vocYear','vocHonors','colName','colCourse','colYear','colHonors','pgName','pgCourse','pgYear','pgHonors','extraSchools'] },
         { key: 'qualification', num: 'VI', label: 'General Qualification', href: 'qualification.html',
           fields: ['languages','hobbies','skills','talents','sports','honorsAwards','extracurricular','whyCourse'] },
         { key: 'references', num: 'VII', label: 'References', href: 'references.html',
