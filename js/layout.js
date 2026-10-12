@@ -17,7 +17,7 @@ SIS.onReady(() => {
 
     document.getElementById('sidebar').innerHTML = `
         <div class="side-brand"><div class="logo">R</div>
-          <div><h1>REGISTRAR</h1><p>SIS PORTAL</p></div></div>
+          <div><h1>Admission</h1><p>SIS PORTAL</p></div></div>
         <nav>${links.map(l => `<a href="${l.href}" class="${l.href === here ? 'active' : ''}"><span class="num">${l.num}</span>${l.label}</a>`).join('')}</nav>
         <div class="side-foot">${user.photo ? `<img class="side-avatar" src="${user.photo}" alt="">` : ''}Signed in as<br><b>${SIS.esc(displayName)}</b></div>`;
 

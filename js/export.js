@@ -146,7 +146,7 @@
         const users = data.users;
 
         doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(25);
-        doc.text('REGISTRAR — Student Information System', 40, 46);
+        doc.text('Admission — Student Information System', 40, 46);
         doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(110);
         doc.text(`Users report · ${users.length} account(s) · generated ${new Date().toLocaleString()}`, 40, 62);
 
@@ -206,7 +206,7 @@
     /* ================= PRINT ================= */
     function reportHtml(data) {
         const users = data.users;
-        let html = `<div class="rp-head"><h1>REGISTRAR — STUDENT INFORMATION SYSTEM</h1>
+        let html = `<div class="rp-head"><h1>Admission — STUDENT INFORMATION SYSTEM</h1>
             <p>Users report · ${users.length} account(s) · generated ${new Date().toLocaleString()}</p></div>`;
         for (const u of users) {
             const d = data.records[u.studentNo] || {};
