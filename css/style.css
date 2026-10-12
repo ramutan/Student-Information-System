@@ -228,3 +228,13 @@ label.field input:disabled{background:var(--card-2);color:var(--muted)}
     #printReport td.rp-k{width:210px;background:#f1f1f4;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:#333}
     #printReport tr.rp-sec td{background:#d8c69c;color:#4d4023;font-weight:800;font-size:10px;letter-spacing:1.2px;font-family:Archivo,Arial,sans-serif}
 }
+
+/* ---------- data privacy consent + modal ---------- */
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink);margin:6px 0 4px;cursor:pointer}
+.consent input{width:16px;height:16px;margin-top:2px;accent-color:var(--accent);flex:none}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;max-width:580px;width:100%;max-height:85vh;overflow:auto;padding:26px}
+.modal h2{font-size:18px;margin:0 0 6px}
+.modal p{font-size:13px;line-height:1.6;margin:10px 0;color:var(--ink)}
+.row-school{display:grid;grid-template-columns:1.1fr 1.7fr 1fr .65fr 1fr 40px;gap:10px;align-items:end}
+@media(max-width:860px){.row-school{grid-template-columns:1fr 1fr}}
