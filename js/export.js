@@ -1,12 +1,10 @@
 /* ============================================================
    export.js — formatted Excel / PDF / CSV / print reports
-   SERVER MODE: callers pass data = { users, records }
-   (fetched from /api/admin/data — see admin.html)
-   PDF uses jsPDF + AutoTable (CDN); falls back to print dialog.
+   SERVER MODE: pass data = { users, records }, or call with
+   no arguments and it fetches /api/admin/data itself.
    ============================================================ */
 (function () {
 
-    /* ---------- human-readable field labels ---------- */
     const FIXED = {
         course:'Course', major:'Major / Specialization', email:'Email Address', mobile:'Mobile Number',
         dob:'Date of Birth', placeOfBirth:'Place of Birth', nativeLanguage:'Native Language',
@@ -14,7 +12,7 @@
         schoolYear:'School Year', curriculumYear:'Curriculum Year',
         guardianName:'Guardian Name', guardianRelation:'Guardian Relation',
         honorsAwards:'Honors / Awards / Merits', extracurricular:'Extra-Curricular Activities',
-        whyCourse:'Why Taking This Course', siblings:'Siblings',
+        whyCourse:'Why Taking This Course', siblings:'Siblings', extraSchools:'Additional Schools',
         fatherName:"Father's Name", fatherOccupation:"Father's Occupation", fatherCompany:"Father's Company",
         fatherCompanyAddress:"Father's Company Address", fatherPhone:"Father's Telephone", fatherEmail:"Father's Email",
         motherName:"Mother's Name", motherOccupation:"Mother's Occupation", motherCompany:"Mother's Company",
@@ -35,12 +33,22 @@
 
     function stringify(f, v) {
         if (v === undefined || v === null) return '';
-        if (Array.isArray(v))   // siblings
+        if (Array.isArray(v)) {
+            if (f === 'extraSchools')
+                return v.map(x => [x.level, x.name, x.year ? '(' + x.year + ')' : null, x.course, x.honors].filter(Boolean).join(' ')).join(' | ');
             return v.map(x => [x.name, x.dob ? '(' + x.dob + ')' : null, x.course, x.school].filter(Boolean).join(' ')).join(' | ');
+        }
         return String(v);
     }
 
-    /* ---------- build the full table (used by Excel & CSV) ---------- */
+    /* ---------- data: use the argument, or fetch it ourselves ---------- */
+    async function resolveData(data) {
+        if (data && Array.isArray(data.users)) return data;
+        const res = await fetch('/api/admin/data', { credentials: 'same-origin' });
+        if (!res.ok) { SIS.toast('Export failed — admin access required.'); throw new Error('unauthorized'); }
+        return res.json();
+    }
+
     function usersTable(data) {
         const groups = [{ title: 'ACCOUNT', span: 6 }];
         const head = ['Student No', 'Full Name', 'Email', 'Registered', 'Progress', 'Last Saved'];
@@ -78,8 +86,9 @@
         URL.revokeObjectURL(a.href);
     }
 
-    /* ================= EXCEL (.xls, formatted) ================= */
-    function toExcel(data) {
+    /* ================= EXCEL ================= */
+    async function toExcel(data) {
+        data = await resolveData(data);
         const { groups, head, rows } = usersTable(data);
         const X = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         const widths = [85, 135, 175, 95, 70, 135];
@@ -95,14 +104,14 @@
             '<Worksheet ss:Name="SIS Users"><Table>';
         head.forEach((h, i) => { xml += `<Column ss:Width="${widths[i] || 115}"/>`; });
 
-        xml += '<Row ss:Height="18">';                       // grouped section titles (merged)
+        xml += '<Row ss:Height="18">';
         for (const g of groups)
             xml += (g.span > 1 ? `<Cell ss:MergeAcross="${g.span - 1}" ss:StyleID="grp">` : '<Cell ss:StyleID="grp">') +
                    `<Data ss:Type="String">${X(g.title)}</Data></Cell>`;
-        xml += '</Row><Row ss:Height="28">';                 // field names
+        xml += '</Row><Row ss:Height="28">';
         for (const h of head) xml += `<Cell ss:StyleID="hdr"><Data ss:Type="String">${X(h)}</Data></Cell>`;
         xml += '</Row>';
-        for (const r of rows) {                              // one row per user
+        for (const r of rows) {
             xml += '<Row>';
             for (const v of r) xml += `<Cell ss:StyleID="cell"><Data ss:Type="String">${X(v)}</Data></Cell>`;
             xml += '</Row>';
@@ -116,16 +125,18 @@
         SIS.toast('Excel file downloaded.');
     }
 
-    /* ================= CSV (raw) ================= */
-    function toCsv(data) {
+    /* ================= CSV ================= */
+    async function toCsv(data) {
+        data = await resolveData(data);
         const { head, rows } = usersTable(data);
         const csv = [head, ...rows].map(r => r.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
         download('sis-users.csv', '\ufeff' + csv, 'text/csv;charset=utf-8');
         SIS.toast('CSV downloaded.');
     }
 
-    /* ================= PDF (formatted report) ================= */
-    function toPdf(data) {
+    /* ================= PDF ================= */
+    async function toPdf(data) {
+        data = await resolveData(data);
         if (!(window.jspdf && window.jspdf.jsPDF)) {
             SIS.toast('PDF library not loaded (offline?) — opening print dialog instead.');
             return print(data);
@@ -182,7 +193,7 @@
             }
         }
 
-        const total = doc.internal.getNumberOfPages();       // page numbers
+        const total = doc.internal.getNumberOfPages();
         for (let i = 1; i <= total; i++) {
             doc.setPage(i); doc.setFontSize(8); doc.setTextColor(140);
             doc.text(`Page ${i} of ${total}`,
@@ -192,7 +203,7 @@
         SIS.toast('PDF report downloaded.');
     }
 
-    /* ================= PRINT (fallback / paper) ================= */
+    /* ================= PRINT ================= */
     function reportHtml(data) {
         const users = data.users;
         let html = `<div class="rp-head"><h1>REGISTRAR — STUDENT INFORMATION SYSTEM</h1>
@@ -219,7 +230,8 @@
         return html;
     }
 
-    function print(data) {
+    async function print(data) {
+        data = await resolveData(data);
         document.getElementById('printReport')?.remove();
         const holder = document.createElement('div');
         holder.id = 'printReport';
