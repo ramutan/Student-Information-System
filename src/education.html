@@ -20,6 +20,7 @@
                     <div class="edu-block"><h4>Elementary</h4>
                         <div class="grid g4">
                             <label class="field">Name of school<input name="elemName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="elemCourse"></label>
                             <label class="field">Year graduated<input name="elemYear" placeholder="e.g. 2018"></label>
                             <label class="field">Honors / awards<input name="elemHonors" placeholder="e.g. With honors"></label>
                         </div>
@@ -28,6 +29,7 @@
                     <div class="edu-block"><h4>High School</h4>
                         <div class="grid g4">
                             <label class="field">Name of school<input name="hsName" placeholder="Type school name…"></label>
+                            <label class="field">Course / degree<input name="hsCourse"></label>
                             <label class="field">Year graduated<input name="hsYear" placeholder="e.g. 2022"></label>
                             <label class="field">Honors / awards<input name="hsHonors"></label>
                         </div>
@@ -35,7 +37,7 @@
 
                     <div class="edu-block"><h4>Vocational <span class="opt">(if any)</span></h4>
                         <div class="grid g4">
-                            <label class="field">Name of school<input name="vocName" placeholder="Type school name…"></label>
+                            <label class="field">Name of school<input name="vocName"></label>
                             <label class="field">Course / degree<input name="vocCourse"></label>
                             <label class="field">Year graduated<input name="vocYear"></label>
                             <label class="field">Honors / awards<input name="vocHonors"></label>
@@ -44,7 +46,7 @@
 
                     <div class="edu-block"><h4>College</h4>
                         <div class="grid g4">
-                            <label class="field">Name of school<input name="colName" placeholder="Type school name…"></label>
+                            <label class="field">Name of school<input name="colName"></label>
                             <label class="field">Course / degree<input name="colCourse"></label>
                             <label class="field">Year graduated<input name="colYear"></label>
                             <label class="field">Honors / awards<input name="colHonors"></label>
@@ -53,7 +55,7 @@
 
                     <div class="edu-block"><h4>Post-Graduate <span class="opt">(if any)</span></h4>
                         <div class="grid g4">
-                            <label class="field">Name of school<input name="pgName" placeholder="Type school name…"></label>
+                            <label class="field">Name of school<input name="pgName"></label>
                             <label class="field">Course / degree<input name="pgCourse"></label>
                             <label class="field">Year graduated<input name="pgYear"></label>
                             <label class="field">Honors / awards<input name="pgHonors"></label>
@@ -61,6 +63,15 @@
                     </div>
 
                 </div>
+
+                <div class="band">Additional schools <small>(if you attended more than one school at any level)</small>
+                    <button type="button" class="band-btn" id="addSchool">＋ Add another school</button>
+                </div>
+                <div class="sheet-body">
+                    <p class="subnote">Transferred or attended multiple schools? Add every school you underwent below.</p>
+                    <div id="schoolRows" style="display:grid;gap:12px"></div>
+                </div>
+
                 <div class="actions">
                     <span class="stamp" id="savedStamp"></span>
                     <button type="button" class="btn ghost" id="resetBtn">Reset</button>
@@ -72,6 +83,52 @@
 </div>
 <script src="js/store.js"></script>
 <script src="js/layout.js"></script>
-<script>SIS.bindSection('education');</script>
+<script>
+(function () {
+    const list = document.getElementById('schoolRows');
+
+    function addSchool(v = {}) {
+        const div = document.createElement('div');
+        div.className = 'row-school';
+        div.innerHTML = `
+            <label class="field">Level
+                <select name="schLevel">
+                    <option value="">Choose…</option>
+                    <option>Elementary</option>
+                    <option>High School</option>
+                    <option>Vocational</option>
+                    <option>College</option>
+                    <option>Post-Graduate</option>
+                    <option>Other</option>
+                </select>
+            </label>
+            <label class="field">Name of school<input name="schName" value="${SIS.esc(v.name || '')}" placeholder="Type school name…"></label>
+            <label class="field">Course / degree<input name="schCourse" value="${SIS.esc(v.course || '')}"></label>
+            <label class="field">Year graduated<input name="schYear" value="${SIS.esc(v.year || '')}"></label>
+            <label class="field">Honors / awards<input name="schHonors" value="${SIS.esc(v.honors || '')}"></label>
+            <button type="button" class="row-del" title="Remove school">✕</button>`;
+        div.querySelector('select').value = v.level || '';
+        div.querySelector('.row-del').addEventListener('click', () => div.remove());
+        list.appendChild(div);
+    }
+
+    /* hooks used by SIS.bindSection() */
+    window.collectExtra = obj => {
+        obj.extraSchools = [...document.querySelectorAll('#schoolRows .row-school')].map(r => ({
+            level: r.querySelector('[name="schLevel"]').value,
+            name: r.querySelector('[name="schName"]').value.trim(),
+            course: r.querySelector('[name="schCourse"]').value.trim(),
+            year: r.querySelector('[name="schYear"]').value.trim(),
+            honors: r.querySelector('[name="schHonors"]').value.trim(),
+        })).filter(s => s.name || s.course || s.year || s.honors);
+    };
+    window.applyExtra = vals => {
+        (vals.extraSchools && vals.extraSchools.length ? vals.extraSchools : [{}]).forEach(addSchool);
+    };
+
+    document.getElementById('addSchool').addEventListener('click', () => addSchool());
+    SIS.bindSection('education');
+})();
+</script>
 </body>
 </html>
