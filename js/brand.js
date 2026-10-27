@@ -2,6 +2,7 @@
   'use strict';
 
   var LOCKUP = '/assets/uphsd-logo.png';
+  var LOCKUP_DARK = '/assets/uphsd-logo-dark.png';
   var SEAL = '/assets/uphsd-seal.png';
 
   /* ---- 1. inject CSS (idempotent) ---------------------------- */
@@ -11,14 +12,32 @@
     st.id = 'uphsdBrandCSS';
     st.textContent =
       '.uphsd-lockup{display:block;width:min(100%,220px);height:auto;' +
-        'background:#fff;border-radius:10px;padding:8px 10px;box-sizing:border-box;' +
-        'box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.18)}' +
-      '[data-theme="light"] .uphsd-lockup{box-shadow:inset 0 0 0 1px rgba(0,0,0,.10)}' +
+        'background:transparent;border:none;outline:none;box-shadow:none}' +
       '.uphsd-tile-hidden{display:none !important}';
     document.head.appendChild(st);
   }
 
-  /* ---- 2. replace tile + text with the lockup image ---------- */
+  /* ---- 2. theme detection ------------------------------------ */
+  function themeIsLight() {
+    var t = document.documentElement.getAttribute('data-theme') ||
+            (document.body && document.body.getAttribute('data-theme')) || 'dark';
+    return t === 'light';               // dark is the app default
+  }
+  function lockupSrc() { return themeIsLight() ? LOCKUP : LOCKUP_DARK; }
+
+  function applyLogos() {
+    var want = lockupSrc();
+    var imgs = document.querySelectorAll('img.uphsd-lockup');
+    for (var i = 0; i < imgs.length; i++) {
+      var im = imgs[i];
+      if (im.dataset.uphsdSrc !== want) {   // avoid needless reload/flicker
+        im.dataset.uphsdSrc = want;
+        im.src = want;
+      }
+    }
+  }
+
+  /* ---- 3. replace tile + text with the lockup image ---------- */
   var SELECTORS =
     '.brand-logo,.brand-icon,.brand-mark,.app-logo,.side-logo,' +
     '.logo-tile,.auth-logo,.login-logo,[data-brand-logo],.logo';
@@ -44,14 +63,16 @@
       /* insert the official lockup image where the tile was */
       if (!row.dataset.uphsdLockup) {
         var img = document.createElement('img');
-        img.src = LOCKUP;
-        img.alt = 'University of Perpetual Help System Dalta';
         img.className = 'uphsd-lockup';
+        img.alt = 'University of Perpetual Help System Dalta';
         img.draggable = false;
+        img.dataset.uphsdSrc = lockupSrc();
+        img.src = img.dataset.uphsdSrc;
         row.insertBefore(img, el);
         row.dataset.uphsdLockup = '1';
       }
     }
+    applyLogos();                        // keep every lockup on-theme
   }
 
   var t = null;
@@ -60,7 +81,7 @@
     t = setTimeout(swapOnce, 120);
   }
 
-  /* ---- 3. favicon -------------------------------------------- */
+  /* ---- 4. favicon -------------------------------------------- */
   function setFavicon() {
     var link = document.querySelector('link[rel="icon"]');
     if (!link) {
@@ -83,11 +104,18 @@
     ensureCSS();
     swapOnce();
     setFavicon();
-    // Some sidebars are rendered by JS after the /api/me fetch —
-    // watch the DOM and re-swap if a new tile appears later.
+
+    // JS-rendered sidebars → re-swap when new tiles appear
     if (window.MutationObserver) {
       new MutationObserver(swapDebounced)
         .observe(document.documentElement, { childList: true, subtree: true });
+
+      // theme toggle → swap logo variant instantly
+      var themeObs = new MutationObserver(applyLogos);
+      themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      if (document.body) {
+        themeObs.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+      }
     }
   });
 })();
