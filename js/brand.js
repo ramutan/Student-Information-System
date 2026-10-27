@@ -1,9 +1,8 @@
 (function () {
   'use strict';
 
+  var LOCKUP = '/assets/uphsd-logo.png';
   var SEAL = '/assets/uphsd-seal.png';
-  var NAME_1 = 'University of Perpetual Help';
-  var NAME_2 = 'System Dalta · Admission';
 
   /* ---- 1. inject CSS (idempotent) ---------------------------- */
   function ensureCSS() {
@@ -11,47 +10,18 @@
     var st = document.createElement('style');
     st.id = 'uphsdBrandCSS';
     st.textContent =
-      '.uphsd-logo{display:flex;align-items:center;justify-content:center;' +
-        'background:#fff !important;border-radius:50% !important;padding:3px;' +
-        'box-shadow:inset 0 0 0 1px rgba(0,0,0,.10);overflow:hidden;flex:none}' +
-      '.uphsd-logo img{width:100%;height:100%;object-fit:contain;display:block}' +
-      '.uphsd-name{min-width:0;line-height:1.15}' +
-      '.uphsd-name b{display:block;font-size:13px;font-weight:700;' +
-        'letter-spacing:.2px;color:var(--text,var(--fg,#fff));white-space:nowrap;' +
-        'overflow:hidden;text-overflow:ellipsis}' +
-      '.uphsd-name span{display:block;font-size:9.5px;font-weight:600;' +
-        'letter-spacing:.6px;text-transform:uppercase;margin-top:3px;' +
-        'color:var(--muted,var(--muted-fg,#9aa0a6))}';
+      '.uphsd-lockup{display:block;width:min(100%,220px);height:auto;' +
+        'background:#fff;border-radius:10px;padding:8px 10px;box-sizing:border-box;' +
+        'box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.18)}' +
+      '[data-theme="light"] .uphsd-lockup{box-shadow:inset 0 0 0 1px rgba(0,0,0,.10)}' +
+      '.uphsd-tile-hidden{display:none !important}';
     document.head.appendChild(st);
   }
 
-  /* ---- 2. swap tiles + set the school name ------------------- */
+  /* ---- 2. replace tile + text with the lockup image ---------- */
   var SELECTORS =
     '.brand-logo,.brand-icon,.brand-mark,.app-logo,.side-logo,' +
     '.logo-tile,.auth-logo,.login-logo,[data-brand-logo],.logo';
-
-  function makeName() {
-    var d = document.createElement('div');
-    d.className = 'uphsd-name';
-    d.dataset.uphsdName = '1';
-    d.innerHTML = '<b>' + NAME_1 + '</b><span>' + NAME_2 + '</span>';
-    return d;
-  }
-
-  function nameBlockFor(row, tile) {
-    /* a) reuse an existing text container if there is one */
-    var t = row.querySelector('.brand-text,.brand-title,.brand-sub,.app-title');
-    if (t) return t.closest('.brand-text') || t;
-    /* b) else first sibling element that actually has text */
-    for (var i = 0; i < row.children.length; i++) {
-      var k = row.children[i];
-      if (k === tile || k.contains(tile)) continue;
-      if (k.classList && (k.classList.contains('uphsd-logo') || k.classList.contains('uphsd-name'))) continue;
-      if ((k.textContent || '').trim()) return k;
-    }
-    /* c) nothing found → caller creates one */
-    return null;
-  }
 
   function swapOnce() {
     var tiles = document.querySelectorAll(SELECTORS);
@@ -60,33 +30,26 @@
       if (el.dataset.uphsdDone) continue;
       el.dataset.uphsdDone = '1';
 
-      /* seal into the tile */
-      if (el.tagName === 'IMG') {
-        el.src = SEAL;
-        el.alt = 'UPHSD seal';
-      } else {
-        el.textContent = '';
-        el.classList.add('uphsd-logo');
-        var img = document.createElement('img');
-        img.src = SEAL;
-        img.alt = 'UPHSD seal';
-        img.draggable = false;
-        el.appendChild(img);
-      }
+      var row = el.closest('.brand,.brand-row,.brand-header,.sidebar-header,.side-header,.auth-brand') ||
+                el.parentElement;
+      if (!row) continue;
 
-      /* school name beside the seal */
-      var row = el.closest('.brand,.brand-row,.brand-header,.sidebar-header,.side-header') || el.parentElement;
-      if (row && !row.dataset.uphsdNamed) {
-        var tb = nameBlockFor(row, el);
-        if (tb) {
-          tb.dataset.uphsdName = '1';
-          tb.innerHTML = '<b>' + NAME_1 + '</b><span>' + NAME_2 + '</span>';
-          tb.classList.add('uphsd-name');
-        } else {
-          var nb = makeName();
-          el.insertAdjacentElement('afterend', nb);
-        }
-        row.dataset.uphsdNamed = '1';
+      /* hide the old letter tile */
+      el.classList.add('uphsd-tile-hidden');
+
+      /* hide old brand text so it doesn't clash with the wordmark */
+      var texts = row.querySelectorAll('.brand-text,.brand-title,.brand-sub,.app-title,.uphsd-name');
+      for (var k = 0; k < texts.length; k++) texts[k].classList.add('uphsd-tile-hidden');
+
+      /* insert the official lockup image where the tile was */
+      if (!row.dataset.uphsdLockup) {
+        var img = document.createElement('img');
+        img.src = LOCKUP;
+        img.alt = 'University of Perpetual Help System Dalta';
+        img.className = 'uphsd-lockup';
+        img.draggable = false;
+        row.insertBefore(img, el);
+        row.dataset.uphsdLockup = '1';
       }
     }
   }
