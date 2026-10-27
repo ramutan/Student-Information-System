@@ -1,30 +1,3 @@
-/* ============================================================
-   exports.js — FIXED export suite for buddy's SIS  (v2)
-   ------------------------------------------------------------
-   v2: PDF + print headers now use the FULL UPHSD lockup
-       (seal + "University of Perpetual Help System Dalta"),
-       with automatic fallback to seal-only if the image is missing.
-   Replaces the old exportExcel / exportCSV / exportPDF /
-   printReport functions on every page it is loaded on.
-
-   What was broken → what is fixed:
-   1. Excel (.xls) opened as "corrupt file" → every cell is now
-      XML-escaped, so values like "Ben & Ana" or "<N/A>" can no
-      longer break the SpreadsheetML document.
-   2. PDF button did nothing → jsPDF + AutoTable now load on
-      demand with a clear error message if the CDN is blocked.
-      The PDF also carries the UPHSD seal + maroon header.
-   3. CSV → UTF-8 BOM + proper quoting (commas / quotes / newlines).
-   4. Print printed the whole app UI → now prints a clean report
-      sheet with the UPHSD header only.
-   5. Users with dynamic rows (siblings, extra schools) are
-      flattened into readable text instead of "[object Object]".
-
-   Requires store.js to be loaded first:
-     <script src="js/store.js"></script>
-     <script src="js/brand.js?v=1"></script>
-     <script src="js/exports.js?v=1"></script>   ← add this
-   ============================================================ */
 (function () {
   'use strict';
 
