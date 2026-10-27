@@ -1,6 +1,9 @@
 /* ============================================================
-   exports.js — FIXED export suite for buddy's SIS  (v1)
+   exports.js — FIXED export suite for buddy's SIS  (v2)
    ------------------------------------------------------------
+   v2: PDF + print headers now use the FULL UPHSD lockup
+       (seal + "University of Perpetual Help System Dalta"),
+       with automatic fallback to seal-only if the image is missing.
    Replaces the old exportExcel / exportCSV / exportPDF /
    printReport functions on every page it is loaded on.
 
@@ -36,6 +39,7 @@
 
   var MAROON = [140, 27, 43];           // UPHSD maroon for headers
   var SEAL = '/assets/uphsd-seal.png';
+  var LOCKUP = '/assets/uphsd-logo.png'; // seal + school name (full logo)
   var SCHOOL = 'University of Perpetual Help System Dalta';
   var OFFICE = 'Admission Office — Student Information Sheet';
 
@@ -263,9 +267,9 @@
     if (!(window.jspdf && window.jspdf.jsPDF)) throw new Error('jsPDF unavailable');
   }
 
-  async function sealDataURL() {
+  async function imgDataURL(path) {
     try {
-      var res = await fetch(SEAL, { credentials: 'same-origin' });
+      var res = await fetch(path, { credentials: 'same-origin' });
       if (!res.ok) return null;
       var blob = await res.blob();
       return await new Promise(function (resolve, reject) {
@@ -274,7 +278,7 @@
         fr.onerror = reject;
         fr.readAsDataURL(blob);
       });
-    } catch (e) { return null; }        // no logo → still export
+    } catch (e) { return null; }        // no image → caller falls back
   }
 
   async function exportPDF() {
@@ -285,19 +289,31 @@
       var doc = new jsPDF({ unit: 'pt', format: 'a4' });
       var c = collect();
 
-      /* header */
-      var dataURL = await sealDataURL();
-      if (dataURL) {
-        try { doc.addImage(dataURL, 'PNG', 40, 34, 62, 62); } catch (e) { /* skip logo */ }
+      /* header — full UPHSD lockup (seal + school name), fallback: seal + text */
+      var lockup = await imgDataURL(LOCKUP);
+      if (lockup) {
+        try {
+          doc.addImage(lockup, 'PNG', 40, 30, 196, 52);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(90, 90, 90);
+          doc.text(OFFICE, 40, 96);
+        } catch (e) { /* fall through to seal + text */ lockup = null; }
       }
-      doc.setTextColor(MAROON[0], MAROON[1], MAROON[2]);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text(SCHOOL, 116, 52);
-      doc.setFontSize(10);
-      doc.setTextColor(90, 90, 90);
-      doc.setFont('helvetica', 'normal');
-      doc.text(OFFICE, 116, 68);
+      if (!lockup) {
+        var seal = await imgDataURL(SEAL);
+        if (seal) {
+          try { doc.addImage(seal, 'PNG', 40, 34, 62, 62); } catch (e) { /* skip logo */ }
+        }
+        doc.setTextColor(MAROON[0], MAROON[1], MAROON[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.text(SCHOOL, 116, 52);
+        doc.setFontSize(10);
+        doc.setTextColor(90, 90, 90);
+        doc.setFont('helvetica', 'normal');
+        doc.text(OFFICE, 116, 68);
+      }
 
       doc.setTextColor(30, 30, 30);
       doc.setFont('helvetica', 'bold');
@@ -362,10 +378,11 @@
         document.body.appendChild(box);
       }
       var html =
-        '<div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">' +
-        '  <img src="' + SEAL + '" alt="UPHSD" style="width:72px;height:72px;object-fit:contain">' +
-        '  <div><div class="pr-school">' + SCHOOL + '</div>' +
-        '  <div class="pr-office">' + OFFICE + '</div></div>' +
+        '<div style="margin-bottom:8px">' +
+        '  <img src="' + LOCKUP + '" alt="' + SCHOOL + '" style="width:250px;max-width:100%;object-fit:contain"' +
+        '    onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+        '  <div class="pr-school" style="display:none">' + SCHOOL + '</div>' +
+        '  <div class="pr-office">' + OFFICE + '</div>' +
         '</div>' +
         '<div style="font-weight:700;font-size:15px;margin:10px 0 2px">' + c.title + '</div>' +
         '<div style="font-size:11px;color:#666;margin-bottom:10px">Generated on ' + stamp() + '</div>' +
