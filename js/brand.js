@@ -1,23 +1,3 @@
-/* ============================================================
-   brand.js v2 — UPHSD branding for every page (buddy's SIS)
-   ------------------------------------------------------------
-   What it does (no HTML edits needed):
-   1. Finds the old letter tile (the "R" / "A" square) on any page
-      and replaces it with the real UPHSD seal.
-   2. Puts the SCHOOL NAME next to the seal, so the brand area
-      reads like the official lockup:
-         [seal] University of Perpetual Help
-                SYSTEM DALTA · ADMISSION
-      - If the brand row already has a text block ("Admission /
-        ADMIN"), its text is replaced with the school name.
-      - If the brand row has no text at all, one is created.
-   3. Sets the browser tab favicon to the UPHSD seal.
-   4. Injects all CSS it needs (white round chip, name styles) —
-      works on BOTH dark and light themes.
-
-   Requires: /assets/uphsd-seal.png  (in src/assets/)
-   Load AFTER store.js:   <script src="js/brand.js?v=2"></script>
-   ============================================================ */
 (function () {
   'use strict';
 
