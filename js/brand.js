@@ -94,13 +94,7 @@
   }
 
   /* ---- go ----------------------------------------------------- */
-  function ready(fn) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', fn);
-    } else { fn(); }
-  }
-
-  ready(function () {
+  function boot() {
     ensureCSS();
     swapOnce();
     setFavicon();
@@ -117,5 +111,16 @@
         themeObs.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
       }
     }
-  });
+  }
+
+  /* Run NOW if the body is already parsed (script at end of body),
+     so the lockup is in the DOM before the first paint.
+     Only fall back to DOMContentLoaded if we are in <head>. */
+  if (document.body) {
+    boot();
+  } else if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
