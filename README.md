@@ -69,3 +69,5 @@ Student-Information-System/
 ├── index.html                 # Entry point — Login / Sign up + Data Privacy consent
 ├── css/
 │   └── style.css              # Global styles — maroon & gold theme, dark/light mode
+├── js/
+│   ├── auth.js                # Login / signup logic, password requirement checks
