@@ -28,3 +28,5 @@ The admin oversees everything from one panel: monitoring per-student progress an
 ## 2. Key Features
 
 ### For students
+
+- **Account System** — Sign up with full name, email, and student number (both unique per account); live password-requirement checklist with show/hide toggles; log in with either student number or email.
