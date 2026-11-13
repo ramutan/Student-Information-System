@@ -92,3 +92,4 @@ Student-Information-System/
 │   ├── education.html         # V.    Educational Background
 │   ├── qualification.html     # VI.   General Qualification
 │   └── references.html        # VII.  References
+├── package.json               # Dependencies and scripts
