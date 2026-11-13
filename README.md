@@ -43,3 +43,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 - **Permanent Cloud Storage** — All accounts and submissions live in PostgreSQL on Neon; data survives redeploys, restarts, and server sleep cycles.
 - **Report Exports** — Formatted Excel (`.xls`) with grouped section headers, per-user PDF reports, raw CSV, and a print-friendly report — covering every account and every answer.
 - **Dark & Light Mode** — Theme toggle on every page, persisted across sessions.
+- **UPHSD Branding** — Official seal + wordmark on every page (theme-blending logo, favicon = university seal), maroon & gold palette, and exports carry the full lockup header.
