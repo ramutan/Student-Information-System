@@ -37,3 +37,7 @@ The admin oversees everything from one panel: monitoring per-student progress an
 ### For the admin
 
 - **Admin Panel** — Role-based access: view all registered users, monitor per-user progress and last-saved dates, reset passwords (secure temporary passwords), clear records, delete accounts, and export everything.
+
+### System-wide
+
+- **Permanent Cloud Storage** — All accounts and submissions live in PostgreSQL on Neon; data survives redeploys, restarts, and server sleep cycles.
