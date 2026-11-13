@@ -58,3 +58,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | Styling | Custom CSS (`css/style.css`) | UPHSD maroon & gold theme, dark/light modes |
 | Backend | Node.js + Express | REST API, auth, sessions, static hosting |
 | Database | PostgreSQL (Neon) | Accounts, GSPIS answers, profile photos |
+| Security | bcrypt + server sessions | Password hashing, protected admin routes |
