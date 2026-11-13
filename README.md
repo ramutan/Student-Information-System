@@ -60,3 +60,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | Database | PostgreSQL (Neon) | Accounts, GSPIS answers, profile photos |
 | Security | bcrypt + server sessions | Password hashing, protected admin routes |
 | Exports | SpreadsheetML (`.xls`), jsPDF + AutoTable, CSV, print | Student and admin reports |
+| Deployment | GitHub + Render | Push-to-deploy hosting |
