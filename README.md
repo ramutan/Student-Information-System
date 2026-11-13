@@ -20,3 +20,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | **Users** | Students (encode GSPIS) · Admin (manage all accounts) |
 | **Frontend** | Multi-page HTML / CSS / JavaScript — no framework |
 | **Backend** | Node.js + Express REST API (`lib/server.js`) |
+| **Database** | PostgreSQL hosted on Neon (permanent cloud storage) |
