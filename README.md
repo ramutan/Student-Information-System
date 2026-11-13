@@ -12,3 +12,5 @@
 ## 1. What this project is
 
 The Student Information System is a web application built for the **University of Perpetual Help System Dalta (UPHSD) Admission Office**. Students register an account (student number or email), then fill out the **7-Section Information Sheet (GSPIS)** online — Personal Data, Residence, Physical Description, Family, Educational Background, General Qualification, and References. Every answer is saved to a cloud PostgreSQL database as they go, so nothing is lost between sessions.
+
+The admin oversees everything from one panel: monitoring per-student progress and last-saved dates, resetting passwords, clearing records, deleting accounts, and exporting all data. The entire interface carries the official UPHSD **maroon-and-gold** identity, including the university seal and wordmark on every page.
