@@ -18,3 +18,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | | |
 |---|---|
 | **Users** | Students (encode GSPIS) · Admin (manage all accounts) |
+| **Frontend** | Multi-page HTML / CSS / JavaScript — no framework |
