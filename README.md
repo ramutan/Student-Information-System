@@ -57,3 +57,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | Frontend | HTML · CSS · JavaScript | Multi-page app, no framework |
 | Styling | Custom CSS (`css/style.css`) | UPHSD maroon & gold theme, dark/light modes |
 | Backend | Node.js + Express | REST API, auth, sessions, static hosting |
+| Database | PostgreSQL (Neon) | Accounts, GSPIS answers, profile photos |
