@@ -30,3 +30,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 ### For students
 
 - **Account System** — Sign up with full name, email, and student number (both unique per account); live password-requirement checklist with show/hide toggles; log in with either student number or email.
+- **7-Section Information Sheet (GSPIS)** — Personal Data (incl. Alien Status), Residence Data, Physical Description, Family Data (dynamic sibling rows), Educational Background, General Qualification, and References.
