@@ -47,3 +47,5 @@ The admin oversees everything from one panel: monitoring per-student progress an
 - **Security** — Passwords are bcrypt-hashed (never stored or viewable in plain text); secrets live in environment variables (never committed); sessions are server-managed; admin routes are protected server-side.
 - **Data Privacy** — Consent notice presented before encoding; consent is recorded per account.
 - **Responsive Design** — Optimized for desktop, tablet, and mobile.
+
+---
