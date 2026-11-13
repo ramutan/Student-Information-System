@@ -109,3 +109,12 @@ Student-Information-System/
 - [Node.js](https://nodejs.org/) 18+
 - A free PostgreSQL database on [Neon](https://neon.tech/)
 - A [Render](https://render.com/) account (for deployment)
+
+### Environment variables
+
+Create a `.env` file in the project root (**never commit it**):
+ 
+```env
+DATABASE_URL=postgresql://user:password@ep-xxxx.neon.tech/neondb
+SESSION_SECRET=change-me-to-a-long-random-string
+```
