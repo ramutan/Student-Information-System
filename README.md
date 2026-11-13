@@ -71,3 +71,7 @@ Student-Information-System/
 │   └── style.css              # Global styles — maroon & gold theme, dark/light mode
 ├── js/
 │   ├── auth.js                # Login / signup logic, password requirement checks
+│   ├── store.js               # SIS data layer — saves each section to the API
+│   ├── layout.js              # Sidebar, topbar, progress bar, theme toggle
+│   ├── brand.js               # UPHSD logo on every page (no-flash swap, v5)
+│   └── exports.js             # Excel / PDF / CSV / print export suite (v2)
