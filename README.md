@@ -61,3 +61,5 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | Security | bcrypt + server sessions | Password hashing, protected admin routes |
 | Exports | SpreadsheetML (`.xls`), jsPDF + AutoTable, CSV, print | Student and admin reports |
 | Deployment | GitHub + Render | Push-to-deploy hosting |
+
+## 4. Project Structure
