@@ -147,3 +147,5 @@ npm start            # or: node lib/server.js
 ---
 
 ## 8. Branding
+
+All pages, exports, and printed reports use the official University of Perpetual Help System Dalta identity: maroon & gold palette, the university seal as favicon, and the full seal + wordmark lockup (light and dark variants) on every page.
