@@ -1,3 +1,5 @@
 # UPHSD Student Information System (SIS)
 
 **Admission Office - a full-stack, 7-section GSPIS encoder with cloud storage, an admin control panel, and branded report exports.**
+
+![backend](https://img.shields.io/badge/backend-Node.js%20%2B%20Express-339933?labelColor=555555&style=flat-square)
