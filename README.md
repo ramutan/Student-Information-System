@@ -24,3 +24,7 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | **Hosting** | Render — auto-deploys on every `git push` |
 
 ---
+
+## 2. Key Features
+
+### For students
