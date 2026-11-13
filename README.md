@@ -44,3 +44,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 - **Report Exports** — Formatted Excel (`.xls`) with grouped section headers, per-user PDF reports, raw CSV, and a print-friendly report — covering every account and every answer.
 - **Dark & Light Mode** — Theme toggle on every page, persisted across sessions.
 - **UPHSD Branding** — Official seal + wordmark on every page (theme-blending logo, favicon = university seal), maroon & gold palette, and exports carry the full lockup header.
+- **Security** — Passwords are bcrypt-hashed (never stored or viewable in plain text); secrets live in environment variables (never committed); sessions are server-managed; admin routes are protected server-side.
