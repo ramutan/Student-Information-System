@@ -59,3 +59,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | Backend | Node.js + Express | REST API, auth, sessions, static hosting |
 | Database | PostgreSQL (Neon) | Accounts, GSPIS answers, profile photos |
 | Security | bcrypt + server sessions | Password hashing, protected admin routes |
+| Exports | SpreadsheetML (`.xls`), jsPDF + AutoTable, CSV, print | Student and admin reports |
