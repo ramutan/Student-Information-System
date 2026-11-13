@@ -135,3 +135,5 @@ npm start            # or: node lib/server.js
 3. On Render, create a **Web Service** from the repo and add `DATABASE_URL` and `SESSION_SECRET` under **Environment**.
 4. Every `git push` to `main` triggers an automatic deploy — data persists in Neon across all redeploys.
 ---
+
+## 7. Security & Data Privacy
