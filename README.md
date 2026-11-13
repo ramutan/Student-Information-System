@@ -67,3 +67,5 @@ The admin oversees everything from one panel: monitoring per-student progress an
 ```text
 Student-Information-System/
 ├── index.html                 # Entry point — Login / Sign up + Data Privacy consent
+├── css/
+│   └── style.css              # Global styles — maroon & gold theme, dark/light mode
