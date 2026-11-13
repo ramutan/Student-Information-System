@@ -93,3 +93,7 @@ Student-Information-System/
 │   ├── qualification.html     # VI.   General Qualification
 │   └── references.html        # VII.  References
 ├── package.json               # Dependencies and scripts
+├── package-lock.json          # Locked dependency versions
+├── .env                       # Secrets — NEVER committed (DATABASE_URL, SESSION_SECRET)
+└── .gitignore                 # Excludes .env, node_modules, and database files
+```
