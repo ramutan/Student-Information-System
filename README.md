@@ -77,3 +77,18 @@ Student-Information-System/
 │   └── exports.js             # Excel / PDF / CSV / print export suite (v2)
 ├── lib/
 │   └── server.js              # Express server — REST API + PostgreSQL + sessions
+├── src/
+│   ├── assets/
+│   │   ├── uphsd-logo.png         # Official lockup — light theme + PDF/print
+│   │   ├── uphsd-logo-dark.png    # Lockup variant — dark theme
+│   │   └── uphsd-seal.png         # University seal — favicon + PDF fallback
+│   ├── dashboard.html         # Progress overview + account settings
+│   ├── profile.html           # Edit name, email, and profile photo
+│   ├── admin.html             # Control panel — user management + exports
+│   ├── personal.html          # I.    Personal Data (incl. Alien Status)
+│   ├── residence.html         # II.   Residence Data
+│   ├── physical.html          # III.  Physical Description
+│   ├── family.html            # IV.   Family Data (dynamic sibling rows)
+│   ├── education.html         # V.    Educational Background
+│   ├── qualification.html     # VI.   General Qualification
+│   └── references.html        # VII.  References
