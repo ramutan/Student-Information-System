@@ -137,3 +137,5 @@ npm start            # or: node lib/server.js
 ---
 
 ## 7. Security & Data Privacy
+
+- Passwords are **bcrypt-hashed** — never stored or displayed in plain text.
