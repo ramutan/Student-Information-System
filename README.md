@@ -36,3 +36,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 
 ### For the admin
 
+- **Admin Panel** — Role-based access: view all registered users, monitor per-user progress and last-saved dates, reset passwords (secure temporary passwords), clear records, delete accounts, and export everything.
