@@ -136,9 +136,12 @@ npm start            # or: node lib/server.js
 4. Every `git push` to `main` triggers an automatic deploy — data persists in Neon across all redeploys.
 ---
 
+
 ## 7. Security & Data Privacy
 
 - Passwords are **bcrypt-hashed** — never stored or displayed in plain text.
 - Secrets (`.env`) are never committed; they are configured per environment.
 - Sessions are server-managed; admin routes are protected server-side.
 - A **Data Privacy consent** step is required before encoding, and consent is recorded per account.
+
+---
