@@ -63,3 +63,7 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | Deployment | GitHub + Render | Push-to-deploy hosting |
 
 ## 4. Project Structure
+
+```text
+Student-Information-System/
+├── index.html                 # Entry point — Login / Sign up + Data Privacy consent
