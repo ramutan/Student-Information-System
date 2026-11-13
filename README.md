@@ -53,3 +53,5 @@ The admin oversees everything from one panel: monitoring per-student progress an
 ## 3. Tech Stack 
 
 | Layer | Technology | Purpose |
+|---|---|---|
+| Frontend | HTML · CSS · JavaScript | Multi-page app, no framework |
