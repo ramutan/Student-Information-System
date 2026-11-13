@@ -21,3 +21,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 | **Frontend** | Multi-page HTML / CSS / JavaScript — no framework |
 | **Backend** | Node.js + Express REST API (`lib/server.js`) |
 | **Database** | PostgreSQL hosted on Neon (permanent cloud storage) |
+| **Hosting** | Render — auto-deploys on every `git push` |
