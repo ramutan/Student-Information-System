@@ -49,3 +49,7 @@ The admin oversees everything from one panel: monitoring per-student progress an
 - **Responsive Design** — Optimized for desktop, tablet, and mobile.
 
 ---
+
+## 3. Tech Stack 
+
+| Layer | Technology | Purpose |
