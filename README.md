@@ -32,3 +32,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 - **Account System** — Sign up with full name, email, and student number (both unique per account); live password-requirement checklist with show/hide toggles; log in with either student number or email.
 - **7-Section Information Sheet (GSPIS)** — Personal Data (incl. Alien Status), Residence Data, Physical Description, Family Data (dynamic sibling rows), Educational Background, General Qualification, and References.
 - **Progress Tracking** — Live completion percentage per section and overall, shown on the dashboard and topbar.
+- **User Profile** — Editable full name and email, with photo upload (automatically resized and stored in the database).
