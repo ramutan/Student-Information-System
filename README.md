@@ -127,3 +127,11 @@ npm start            # or: node lib/server.js
 ```
 
 ---
+
+## 6. Deployment (Render + Neon)
+ 
+1. Create the database on Neon and copy its connection string into `DATABASE_URL`.
+2. Push this repo to GitHub.
+3. On Render, create a **Web Service** from the repo and add `DATABASE_URL` and `SESSION_SECRET` under **Environment**.
+4. Every `git push` to `main` triggers an automatic deploy — data persists in Neon across all redeploys.
+---
