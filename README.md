@@ -118,3 +118,10 @@ Create a `.env` file in the project root (**never commit it**):
 DATABASE_URL=postgresql://user:password@ep-xxxx.neon.tech/neondb
 SESSION_SECRET=change-me-to-a-long-random-string
 ```
+
+### Install & run 
+
+```bash
+npm install
+npm start            # or: node lib/server.js
+```
