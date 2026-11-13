@@ -145,3 +145,5 @@ npm start            # or: node lib/server.js
 - A **Data Privacy consent** step is required before encoding, and consent is recorded per account.
 
 ---
+
+## 8. Branding
