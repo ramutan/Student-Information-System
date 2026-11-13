@@ -46,3 +46,4 @@ The admin oversees everything from one panel: monitoring per-student progress an
 - **UPHSD Branding** — Official seal + wordmark on every page (theme-blending logo, favicon = university seal), maroon & gold palette, and exports carry the full lockup header.
 - **Security** — Passwords are bcrypt-hashed (never stored or viewable in plain text); secrets live in environment variables (never committed); sessions are server-managed; admin routes are protected server-side.
 - **Data Privacy** — Consent notice presented before encoding; consent is recorded per account.
+- **Responsive Design** — Optimized for desktop, tablet, and mobile.
