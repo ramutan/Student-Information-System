@@ -75,3 +75,5 @@ Student-Information-System/
 │   ├── layout.js              # Sidebar, topbar, progress bar, theme toggle
 │   ├── brand.js               # UPHSD logo on every page (no-flash swap, v5)
 │   └── exports.js             # Excel / PDF / CSV / print export suite (v2)
+├── lib/
+│   └── server.js              # Express server — REST API + PostgreSQL + sessions
