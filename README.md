@@ -97,3 +97,15 @@ Student-Information-System/
 ├── .env                       # Secrets — NEVER committed (DATABASE_URL, SESSION_SECRET)
 └── .gitignore                 # Excludes .env, node_modules, and database files
 ```
+
+
+
+---
+
+## 5. Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 18+
+- A free PostgreSQL database on [Neon](https://neon.tech/)
+- A [Render](https://render.com/) account (for deployment)
